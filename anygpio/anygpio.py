@@ -1,13 +1,6 @@
 import sys
 import os
-import .errors
-
-echo __name__
-
-# Set module to `this`
-this = sys.modules[__name__]
-
-echo this
+from . import errors
 
 # Requrire sudo
 if os.getuid() != 0:
@@ -26,15 +19,15 @@ class Supports:
 
 # Generic Pin class
 class Pin:
-    def __init__(self):
-        self.name = None
-        self.number = None
+    def __init__(self, name=None, number=None, action=do_nothing, is_output=False):
+        self.name = name
+        self.number = number
         self.is_analog = False
-        self.is_output = False
-        self.action = do_nothing
+        self.is_output = is_output
+        self.action = action
         self.desired_value = True
 
-    def value():
+    def value(self):
         """
         Use this to return a curated, semantic value from the pins input
 
@@ -43,22 +36,29 @@ class Pin:
         """
         return self.input()
 
-    def input():
+    def input(self):
         # Get input value of pin from the native GPIO library
 
-        if (pin.is_output):
+        if (self.is_output):
             raise errors.WrongPinType("Pin is set to output")
-        else
+        else:
             raise errors.SystemNotSet("Please set your system first")
             # return native_gpio.getPinInput(pin.number)
 
-    def output(value):
+    def output(self, value):
         # Outputs the desired value to the pin
-        if (pin.is_output):
+        if (self.is_output):
             raise errors.SystemNotSet("Please set your system first")
             # return native_gpio.outputToPin(pin.number, value)
-        else
+        else:
             raise errors.WrongPinType("Pin is set to input")
+
+    def setup(self):
+        # Use this to initialize the pin with the native_gpio
+
+        raise errors.SystemNotSet("Please set your system first")
+        # native_gpio.setup(self.number, GPIO.OUT if self.is_output else GPIO.IN)
+
 
 # Generic module class
 class AnyGPIO:
@@ -68,22 +68,23 @@ class AnyGPIO:
         self.supports = Supports()
         self.system = None
 
-    def setup_pin():
+    def setup_pin(self):
         # Use this to initialize a pin
 
         raise errors.SystemNotSet("Please set your system first")
+        self._add_pin(pin)
 
-    def _add_pin(pin):
+    def _add_pin(self, pin):
         self.pins.append(pin)
 
-    def drop_pin():
+    def drop_pin(self ):
         # Use this to remove a pin configuration
         raise errors.SystemNotSet("Please set your system first")
 
-    def _remove_pin(pin):
+    def _remove_pin(self, pin):
         self.pins.remove(pin)
 
-    def get_pin(pin_id):
+    def get_pin(self, pin_id):
         # Find a pin in the pins array
         # pin_id could be pin.name or pin.number
 
@@ -92,7 +93,7 @@ class AnyGPIO:
             for pin in self.pins:
                 if pin_id == pin.number:
                     return pin
-        else
+        else:
             # If pin_id is pin.name
             for pin in self.pins:
                 if pin_id == pin.name:
@@ -101,7 +102,7 @@ class AnyGPIO:
         # If pin is not found
         return False
 
-    def watch():
+    def watch(self):
         # Watch all pins for their desired_value, and execute pin.action()
         for pin in self.pins:
             if pin.value() == pin.desired_value:
