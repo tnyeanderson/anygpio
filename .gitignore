@@ -1,3 +1,6 @@
+*.AppleDouble/
+*__pycache__/
+
 # Defaults
 
 # Byte-compiled / optimized / DLL files
