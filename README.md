@@ -42,7 +42,7 @@ This can only be stopped by killing the process or a KeyboardInterrupt
 GPIO.watch()
 
 # Output HIGH to a pin
-GPIO.setup_pin("MY_BUTTON", 18, is_output=True)
+GPIO.setup_pin("MY_OUTPUTTER", 18, is_output=True)
 GPIO.pin(18).output(1)
 ```
 
