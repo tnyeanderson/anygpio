@@ -8,6 +8,7 @@ if os.getuid() != 0:
 
 
 def do_nothing():
+    print("Debug: do_nothing occurred")
     pass
 
 
@@ -26,13 +27,15 @@ class Pin:
         self.is_output = is_output
         self.action = action
         self.desired_value = True
+        self.supports = Supports()
+        self.native = None
 
     def value(self):
         """
         Use this to return a curated, semantic value from the pins input
 
-        For instance, on RPi, when a button is pressed, input() returns False
-        This function should make it return True instead
+        For instance, on RPi, when a button is pressed, input() returns 0
+        This function should make it return 1 instead
         """
         return self.input()
 
@@ -57,34 +60,41 @@ class Pin:
         # Use this to initialize the pin with the native_gpio
 
         raise errors.SystemNotSet("Please set your system first")
-        # native_gpio.setup(self.number, GPIO.OUT if self.is_output else GPIO.IN)
+        # native_gpio.setup(self.number, native_gpio.OUT if self.is_output else native_gpio.IN)
 
 
 # Generic module class
-class AnyGPIO:
+class GPIO:
     def __init__(self):
         # Empty pin array
         self.pins = []
         self.supports = Supports()
         self.system = None
+        self.native = None
 
-    def setup_pin(self):
+    def _require_system_set(self):
+        if not self.system:
+            raise errors.SystemNotSet("Please set your system first")
+
+    def setup_pin(self, name, number, action=do_nothing, is_output=False):
         # Use this to initialize a pin
-
-        raise errors.SystemNotSet("Please set your system first")
+        self._require_system_set()
+        pin = Pin(name, number, action, is_output)
+        pin.setup()
         self._add_pin(pin)
 
     def _add_pin(self, pin):
         self.pins.append(pin)
 
-    def drop_pin(self ):
+    def drop_pin(self, pin):
         # Use this to remove a pin configuration
-        raise errors.SystemNotSet("Please set your system first")
+        self._require_system_set()
+        self._remove_pin(pin)
 
     def _remove_pin(self, pin):
         self.pins.remove(pin)
 
-    def get_pin(self, pin_id):
+    def pin(self, pin_id):
         # Find a pin in the pins array
         # pin_id could be pin.name or pin.number
 
@@ -104,6 +114,8 @@ class AnyGPIO:
 
     def watch(self):
         # Watch all pins for their desired_value, and execute pin.action()
-        for pin in self.pins:
-            if pin.value() == pin.desired_value:
-                pin.action()
+        # Stops only with a KeyboardInterrupt or by killing the process!
+        while True:
+            for pin in self.pins:
+                if pin.value() == pin.desired_value:
+                    pin.action()

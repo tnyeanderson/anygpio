@@ -1,10 +1,12 @@
 from .. import anygpio
 
+# Not tested on hardware yet
+
 try:
     # Import GPIO
-    import RPi.GPIO as native_gpio
+    import onionGpio as native_gpio
 except ImportError:
-    raise ImportError("No module RPi.GPIO")
+    raise ImportError("No module onionGpio")
 
 # Always use BCM Mode
 native_gpio.setmode(native_gpio.BCM)
@@ -15,40 +17,37 @@ class Pin(anygpio.Pin):
         """
         Use this to return a curated, semantic value from the pins input
 
-        For instance, on RPi, when a button is pressed, input() returns 0
-        This function should make it return 1 instead for semantic reasons
+        For instance, on RPi, when a button is pressed, input() returns False
+        This function should make it return True instead
         """
-        return 0 if self.input() else 1
+        return self.input()
 
     def input(self):
         # Get input value of pin from the native GPIO library
-
-        if (self.is_output):
-            raise errors.WrongPinType("Pin is set to output")
-        else:
-            return native_gpio.input(self.number)
+            return self.native.getValue()
 
     def output(self, value):
         # Outputs the desired value to the pin
         # Value is 1 (HIGH) or 0 (LOW)
         if (self.is_output):
-            return native_gpio.output(self.number, value)
+            return self.native.setValue(value)
         else:
             raise errors.WrongPinType("Pin is set to input")
 
     def setup(self):
         # Set up the pin using native_gpio
         # TODO: test this for pull_up_down
+        self.native = native_gpio.OnionGpio(self.number)
         if self.is_output:
-            native_gpio.setup(self.number, native_gpio.OUT)
+            self.native.setOutputDirection()
         else:
-            native_gpio.setup(self.number, native_gpio.IN, pull_up_down=(None if self.is_output else native_gpio.PUD_UP))
+            self.native.setInputDirection()
 
+# Generic module class
 class GPIO(anygpio.GPIO):
     # This has to be here to use the derived Pin class for initialization
     def setup_pin(self, name, number, action=anygpio.do_nothing, is_output=False):
         # Use this to initialize a pin
-        self._require_system_set()
         pin = Pin(name, number, action, is_output)
         pin.setup()
         self._add_pin(pin)
@@ -57,7 +56,7 @@ class GPIO(anygpio.GPIO):
 wrapper = GPIO()
 
 # Set the system to the name of the file
-wrapper.system = "RPi"
+wrapper.system = "Omega2"
 
 # Link the native GPIO library so it can be accessed directly
 wrapper.native = native_gpio
