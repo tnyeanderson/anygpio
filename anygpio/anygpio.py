@@ -64,7 +64,7 @@ class Pin:
         # native_gpio.setup(self.number, native_gpio.OUT if self.is_output else native_gpio.IN)
 
     def destroy(self):
-        rais errors.SystemNotSet("Please set your system first")
+        raise errors.SystemNotSet("Please set your system first")
 
 
 # Generic module class
