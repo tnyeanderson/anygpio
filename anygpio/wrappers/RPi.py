@@ -28,7 +28,7 @@ class Pin(anygpio.Pin):
         For instance, on RPi, when a button is pressed, input() returns 0
         This function should make it return 1 instead for semantic reasons
         """
-        return not int(self.input())
+        return int(not self.input())
 
     def input(self):
         # Get input value of pin from the native GPIO library
