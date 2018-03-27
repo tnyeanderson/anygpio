@@ -18,10 +18,6 @@ try:
 except:
     # raise errors.WrapperError("Wrapper `" + sbc_name + "` could not be imported")
     raise
-finally:
-    print("Cleaning up...")
-    # Clean up sys.path after import
-    #sys.path.pop()
 
 
 # Set GPIO to the wrapper returned from the SBC file

@@ -19,7 +19,7 @@ except:
 native_gpio.setmode(native_gpio.BCM)
 
 # Derived Pin class
-# TEMPLATE: Each method in this class must be changed to use the native_gpio module
+# TEMPLATE: Each method in the Pin class must be changed to use the native_gpio module
 class Pin(anygpio.Pin):
     def value(self):
         """
@@ -28,7 +28,7 @@ class Pin(anygpio.Pin):
         For instance, on RPi, when a button is pressed, input() returns 0
         This function should make it return 1 instead for semantic reasons
         """
-        return 0 if self.input() else 1
+        return not int(self.input())
 
     def input(self):
         # Get input value of pin from the native GPIO library
@@ -62,6 +62,10 @@ class GPIO(anygpio.GPIO):
         pin = Pin(name, number, action, is_output)
         pin.setup()
         self._add_pin(pin)
+
+    def destroy():
+        # TEMPLATE: run native GPIO cleanup() function if available
+        native_gpio.cleanup()
 
 # wrapper is what will be imported by __init__.py
 wrapper = GPIO()

@@ -28,6 +28,7 @@ class Pin:
         self.action = action
         self.desired_value = True
         self.supports = Supports()
+        # Stores native GPIO pin objects
         self.native = None
 
     def value(self):
@@ -61,6 +62,9 @@ class Pin:
 
         raise errors.SystemNotSet("Please set your system first")
         # native_gpio.setup(self.number, native_gpio.OUT if self.is_output else native_gpio.IN)
+
+    def destroy(self):
+        rais errors.SystemNotSet("Please set your system first")
 
 
 # Generic module class
@@ -111,6 +115,10 @@ class GPIO:
 
         # If pin is not found
         return False
+
+    def destroy():
+        # Run the native GPIO cleanup() function if available
+        self._require_system_set()
 
     def watch(self):
         # Watch all pins for their desired_value, and execute pin.action()

@@ -1,15 +1,18 @@
+import importlib
+
 from .. import anygpio
+from .. import errors
 
-# Not tested on hardware yet
+# TEMPLATE: Set to the native GPIO module name
+native_gpio_name = "onionGpio"
 
+
+# Native GPIO module will be imported and assigned to native_gpio
 try:
-    # Import GPIO
-    import onionGpio as native_gpio
-except ImportError:
-    raise ImportError("No module onionGpio")
-
-# Always use BCM Mode
-native_gpio.setmode(native_gpio.BCM)
+    # Import Native GPIO
+    native_gpio = importlib.import_module(native_gpio_name)
+except:
+    raise errors.NoNativeGPIO("Could not import " + native_gpio_name)
 
 # Generic Pin class
 class Pin(anygpio.Pin):
@@ -43,6 +46,9 @@ class Pin(anygpio.Pin):
         else:
             self.native.setInputDirection()
 
+    def destroy(self):
+        self.native._freeGpio()
+
 # Generic module class
 class GPIO(anygpio.GPIO):
     # This has to be here to use the derived Pin class for initialization
@@ -51,6 +57,10 @@ class GPIO(anygpio.GPIO):
         pin = Pin(name, number, action, is_output)
         pin.setup()
         self._add_pin(pin)
+
+    def destroy(self):
+        for pin in self.pins:
+            pin.destroy()
 
 # wrapper is what will be imported by __init__.py
 wrapper = GPIO()
