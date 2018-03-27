@@ -19,7 +19,7 @@ Currently, this library requires you to change __init__.py to import your SBC's 
 from anygpio import GPIO
 
 # Pins are initialized to inputs by default
-GPIO.setup_pin("MY_BUTTON", 18, my_button_pressed_function)
+GPIO.setup_pin(18, "MY_BUTTON", my_button_pressed_function)
 
 """
 Curated input value. Buttons should be 1 (True) when pressed, and 0 (False) when not pressed
@@ -42,7 +42,7 @@ This can only be stopped by killing the process or a KeyboardInterrupt
 GPIO.watch()
 
 # Output HIGH to a pin
-GPIO.setup_pin("MY_OUTPUTTER", 18, is_output=True)
+GPIO.setup_pin(18, "MY_OUTPUTTER", is_output=True)
 GPIO.pin(18).output(1)
 ```
 

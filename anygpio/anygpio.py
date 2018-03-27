@@ -20,7 +20,7 @@ class Supports:
 
 # Generic Pin class
 class Pin:
-    def __init__(self, name=None, number=None, action=do_nothing, is_output=False):
+    def __init__(self, number, name=None, action=do_nothing, is_output=False):
         self.name = name
         self.number = number
         self.is_analog = False
