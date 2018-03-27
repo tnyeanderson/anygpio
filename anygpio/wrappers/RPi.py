@@ -1,15 +1,25 @@
+import importlib
+
 from .. import anygpio
+from .. import errors
 
+# TEMPLATE: Set to the native GPIO module name
+native_gpio_name = "RPi.GPIO"
+
+
+# Native GPIO module will be imported and assigned to native_gpio
 try:
-    # Import GPIO
-    import RPi.GPIO as native_gpio
+    # Import Native GPIO
+    native_gpio = importlib.import_module(native_gpio_name)
 except ImportError:
-    raise ImportError("No module RPi.GPIO")
+    raise errors.NoNativeGPIO("Could not import " + native_gpio_name)
 
+# TEMPLATE: to the correct native setmode() function if required, or delete line
 # Always use BCM Mode
 native_gpio.setmode(native_gpio.BCM)
 
-# Generic Pin class
+# Derived Pin class
+# TEMPLATE: Each method in this class must be changed to use the native_gpio module
 class Pin(anygpio.Pin):
     def value(self):
         """
@@ -56,7 +66,7 @@ class GPIO(anygpio.GPIO):
 # wrapper is what will be imported by __init__.py
 wrapper = GPIO()
 
-# Set the system to the name of the file
+# TEMPLATE: Set the system to the name of the file
 wrapper.system = "RPi"
 
 # Link the native GPIO library so it can be accessed directly

@@ -4,3 +4,9 @@ class SystemNotSet(Exception):
 
 class WrongPinType(Exception):
     pass
+
+class NoNativeGPIO(Exception):
+    pass
+
+class WrapperError(Exception):
+    pass
