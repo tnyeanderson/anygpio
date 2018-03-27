@@ -11,7 +11,7 @@ native_gpio_name = "RPi.GPIO"
 try:
     # Import Native GPIO
     native_gpio = importlib.import_module(native_gpio_name)
-except ImportError:
+except:
     raise errors.NoNativeGPIO("Could not import " + native_gpio_name)
 
 # TEMPLATE: to the correct native setmode() function if required, or delete line

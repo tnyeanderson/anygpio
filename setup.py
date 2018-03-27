@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='anygpio',
@@ -7,5 +7,5 @@ setup(
     url='http://github.com/tnyeanderson/anygpio',
     author='Thomas Anderson',
     author_email='tnyeanderson@gmail.com',
-    packages=['anygpio'],
+    packages=find_packages(),
 )
