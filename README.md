@@ -41,9 +41,20 @@ This can only be stopped by killing the process or a KeyboardInterrupt
 """
 GPIO.watch()
 
+
+# Set up output pin
+# Default initial value is always 0 (LOW) unless set here
+GPIO.setup_pin(18, "MY_OUTPUTTER", is_output=True, initial_value=1)
+
+# Output LOW to a pin
+GPIO.pin(18).output(0)
+
 # Output HIGH to a pin
-GPIO.setup_pin(18, "MY_OUTPUTTER", is_output=True)
 GPIO.pin(18).output(1)
+
+
+# Run native GPIO cleanup functions
+GPIO.destroy()
 ```
 
 *Better docs, more wrappers, and more features to come!*

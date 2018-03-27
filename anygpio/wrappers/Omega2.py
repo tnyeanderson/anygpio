@@ -42,7 +42,7 @@ class Pin(anygpio.Pin):
         # TODO: test this for pull_up_down
         self.native = native_gpio.OnionGpio(self.number)
         if self.is_output:
-            self.native.setOutputDirection()
+            self.native.setOutputDirection(self.initial_value)
         else:
             self.native.setInputDirection()
 
@@ -52,9 +52,11 @@ class Pin(anygpio.Pin):
 # Generic module class
 class GPIO(anygpio.GPIO):
     # This has to be here to use the derived Pin class for initialization
-    def setup_pin(self, name, number, action=anygpio.do_nothing, is_output=False):
+    def setup_pin(self, name, number, action=anygpio.do_nothing, is_output=False, initial_value=0):
         # Use this to initialize a pin
-        pin = Pin(name, number, action, is_output)
+        # Require the system to be set
+        self._require_system_set()
+        pin = Pin(name, number, action, is_output, initial_value)
         pin.setup()
         self._add_pin(pin)
 

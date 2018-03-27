@@ -20,13 +20,14 @@ class Supports:
 
 # Generic Pin class
 class Pin:
-    def __init__(self, number, name=None, action=do_nothing, is_output=False):
+    def __init__(self, number, name=None, action=do_nothing, is_output=False, initial_value=None):
         self.name = name
         self.number = number
         self.is_analog = False
         self.is_output = is_output
         self.action = action
         self.desired_value = True
+        self.initial_value = initial_value
         self.supports = Supports()
         # Stores native GPIO pin objects
         self.native = None

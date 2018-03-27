@@ -50,16 +50,18 @@ class Pin(anygpio.Pin):
         # Set up the pin using native_gpio
         # TODO: test this for pull_up_down
         if self.is_output:
-            native_gpio.setup(self.number, native_gpio.OUT)
+            native_gpio.setup(self.number, native_gpio.OUT, initial=self.initial_value)
         else:
             native_gpio.setup(self.number, native_gpio.IN, pull_up_down=(None if self.is_output else native_gpio.PUD_UP))
 
 class GPIO(anygpio.GPIO):
-    # This has to be here to use the derived Pin class for initialization
-    def setup_pin(self, name, number, action=anygpio.do_nothing, is_output=False):
+    # TEMPLATE: Change argument initial_value to the native_gpio.LOW value
+    def setup_pin(self, name, number, action=anygpio.do_nothing, is_output=False, initial_value=0):
         # Use this to initialize a pin
+        # Require the system to be set
         self._require_system_set()
-        pin = Pin(name, number, action, is_output)
+        # Create a pin
+        pin = Pin(number, name, action, is_output, initial_value)
         pin.setup()
         self._add_pin(pin)
 
