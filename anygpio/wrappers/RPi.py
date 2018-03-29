@@ -42,7 +42,7 @@ class Pin(anygpio.Pin):
         # Outputs the desired value to the pin
         # Value is 1 (HIGH) or 0 (LOW)
         if (self.is_output):
-            return native_gpio.output(self.number, value)
+            return native_gpio.output(self.id, value)
         else:
             raise errors.WrongPinType("Pin is set to input")
 
@@ -50,9 +50,9 @@ class Pin(anygpio.Pin):
         # Set up the pin using native_gpio
         # TODO: test this for pull_up_down
         if self.is_output:
-            native_gpio.setup(self.number, native_gpio.OUT, initial=self.initial_value)
+            native_gpio.setup(self.id, native_gpio.OUT, initial=self.initial_value)
         else:
-            native_gpio.setup(self.number, native_gpio.IN, pull_up_down=(None if self.is_output else native_gpio.PUD_UP))
+            native_gpio.setup(self.id, native_gpio.IN, pull_up_down=(None if self.is_output else native_gpio.PUD_UP))
 
 class GPIO(anygpio.GPIO):
     # TEMPLATE: Change argument initial_value to the native_gpio.LOW value

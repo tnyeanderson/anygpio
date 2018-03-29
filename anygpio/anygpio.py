@@ -20,9 +20,24 @@ class Supports:
 
 # Generic Pin class
 class Pin:
-    def __init__(self, number, name=None, action=do_nothing, is_output=False, initial_value=None):
+    def __init__(self, number, name=None, action=do_nothing, header=None, is_output=False, initial_value=None, id=None):
+        # User defined pin name
         self.name = name
+
+        # Pin ID as identified by native_gpio
+        # Could be int (01) or could be string ("p9_10")
+        self.id = id
+
+        # Pin number as integer
+        # Used as id on systems such as RPi and Omega2
+        # Used in combination with header info for C.H.I.P
         self.number = number
+
+        # Physical header on which pin is located
+        # Used in systems like C.H.I.P
+        #   (id="p" + self.header + "_" + pin.number)
+        self.header = header
+
         self.is_analog = False
         self.is_output = is_output
         self.action = action
@@ -41,6 +56,17 @@ class Pin:
         """
         return self.input()
 
+    @property
+    def id(self):
+        """
+        Returns the id that will be passed to native_gpio
+
+        Calculation can be done to generate id from self.header
+            and self.number if needed
+        """
+        return self._id
+
+
     def input(self):
         # Get input value of pin from the native GPIO library
 
@@ -48,13 +74,13 @@ class Pin:
             raise errors.WrongPinType("Pin is set to output")
         else:
             raise errors.SystemNotSet("Please set your system first")
-            # return native_gpio.getPinInput(pin.number)
+            # return native_gpio.getPinInput(pin.id)
 
     def output(self, value):
         # Outputs the desired value to the pin
         if (self.is_output):
             raise errors.SystemNotSet("Please set your system first")
-            # return native_gpio.outputToPin(pin.number, value)
+            # return native_gpio.outputToPin(pin.id, value)
         else:
             raise errors.WrongPinType("Pin is set to input")
 
@@ -62,7 +88,7 @@ class Pin:
         # Use this to initialize the pin with the native_gpio
 
         raise errors.SystemNotSet("Please set your system first")
-        # native_gpio.setup(self.number, native_gpio.OUT if self.is_output else native_gpio.IN)
+        # native_gpio.setup(self.id, native_gpio.OUT if self.is_output else native_gpio.IN)
 
     def destroy(self):
         raise errors.SystemNotSet("Please set your system first")
@@ -99,19 +125,28 @@ class GPIO:
     def _remove_pin(self, pin):
         self.pins.remove(pin)
 
-    def pin(self, pin_id):
+    def pin(self, query, id=None):
         # Find a pin in the pins array
-        # pin_id could be pin.name or pin.number
+        # query could be pin.name or pin.number
 
-        if isinstance(pin_id, int):
-            # If pin_id is pin.number
+        if id:
+            # If searching by id
             for pin in self.pins:
-                if pin_id == pin.number:
+                if id == pin.id:
+                    return pin
+            return False
+
+
+        # Check datatype of query
+        if isinstance(query, int):
+            # If query is pin.number
+            for pin in self.pins:
+                if query == pin.number:
                     return pin
         else:
-            # If pin_id is pin.name
+            # If query is pin.name
             for pin in self.pins:
-                if pin_id == pin.name:
+                if query == pin.name:
                     return pin
 
         # If pin is not found

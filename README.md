@@ -1,6 +1,6 @@
 # Cross-Platform GPIO library for Single-Board Computers
 
-*This project is a work in progress*
+*This project is a work in progress, changes may be made at any time that may not be backwards compatible. Submit a pull request to help make this not a WIP!*
 
 This goal of this project is to create a "universal"
 language for simple GPIO functions on Single-Board Computers (SBCs). Currently, this involves simple pin initialization, reading input (HIGH or LOW), and outputting to the pin (HIGH or LOW). More functionality may be added later (such as PWM).
@@ -20,6 +20,17 @@ from anygpio import GPIO
 
 # Pins are initialized to inputs by default
 GPIO.setup_pin(18, "MY_BUTTON", my_button_pressed_function)
+
+# Return a pin from the pin array
+GPIO.pin(18)
+GPIO.pin("MY_BUTTON")
+
+"""
+id is what will be passed to the Native GPIO library to identify the pin.
+
+In RPi, this is just pin.number but on other systems (like C.H.I.P) it is a combination of pin.number and pin.header ("p9_10") or something else entirely!
+"""
+GPIO.pin(id=18)
 
 """
 Curated input value. Buttons should be 1 (True) when pressed, and 0 (False) when not pressed

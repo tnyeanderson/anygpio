@@ -40,7 +40,7 @@ class Pin(anygpio.Pin):
     def setup(self):
         # Set up the pin using native_gpio
         # TODO: test this for pull_up_down
-        self.native = native_gpio.OnionGpio(self.number)
+        self.native = native_gpio.OnionGpio(self.id)
         if self.is_output:
             self.native.setOutputDirection(self.initial_value)
         else:
