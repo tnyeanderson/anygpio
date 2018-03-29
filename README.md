@@ -28,7 +28,7 @@ GPIO.pin("MY_BUTTON")
 """
 id is what will be passed to the Native GPIO library to identify the pin.
 
-In RPi, this is just pin.number but on other systems (like C.H.I.P) it is a combination of pin.number and pin.header ("p9_10") or something else entirely!
+In RPi, this is just pin.number but on other systems (like BeagleBone) it is a combination of pin.number and pin.header ("p9_10") or something else entirely (C.H.I.P)!
 """
 GPIO.pin(id=18)
 

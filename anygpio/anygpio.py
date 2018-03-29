@@ -30,11 +30,11 @@ class Pin:
 
         # Pin number as integer
         # Used as id on systems such as RPi and Omega2
-        # Used in combination with header info for C.H.I.P
+        # Used in combination with header info for BeagleBone
         self.number = number
 
         # Physical header on which pin is located
-        # Used in systems like C.H.I.P
+        # Used in systems like BeagleBone
         #   (id="p" + self.header + "_" + pin.number)
         self.header = header
 
