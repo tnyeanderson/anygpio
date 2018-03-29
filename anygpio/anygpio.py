@@ -152,7 +152,7 @@ class GPIO:
         # If pin is not found
         return False
 
-    def destroy():
+    def cleanup():
         # Run the native GPIO cleanup() function if available
         self._require_system_set()
 

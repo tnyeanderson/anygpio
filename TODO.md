@@ -8,8 +8,11 @@
 * supports.available_pins or ground_pins
 * Packagify wrappers?
 * GPIO.destroy() on exit
-* Consider changing GPIO.destroy() to GPIO.cleanup()
-* Wrappers for:
+
+* Pull up and pull down resistor setting
+* Format and improve README
+
+Wrappers for:
   - BeagleBone
   - C.H.I.P.
   - Orange Pi
@@ -20,4 +23,3 @@
   - Parallela
   - Banana Pi
   - ODroid
-* Pull up and pull down resistor setting

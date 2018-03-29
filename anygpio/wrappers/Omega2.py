@@ -60,7 +60,7 @@ class GPIO(anygpio.GPIO):
         pin.setup()
         self._add_pin(pin)
 
-    def destroy(self):
+    def cleanup(self):
         for pin in self.pins:
             pin.destroy()
 

@@ -65,7 +65,7 @@ class GPIO(anygpio.GPIO):
         pin.setup()
         self._add_pin(pin)
 
-    def destroy():
+    def cleanup():
         # TEMPLATE: run native GPIO cleanup() function if available
         native_gpio.cleanup()
 
