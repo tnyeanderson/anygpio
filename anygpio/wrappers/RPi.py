@@ -55,7 +55,7 @@ class Pin(anygpio.Pin):
             native_gpio.setup(self.id, native_gpio.IN, pull_up_down=(None if self.is_output else native_gpio.PUD_UP))
 
 class GPIO(anygpio.GPIO):
-    # TEMPLATE: Change argument initial_value to the native_gpio.LOW value
+    # TEMPLATE: Change argument initial_value to the native_gpio.LOW value if needed
     def setup_pin(self, name, number, action=anygpio.do_nothing, is_output=False, initial_value=0):
         # Use this to initialize a pin
         # Require the system to be set
@@ -65,8 +65,12 @@ class GPIO(anygpio.GPIO):
         pin.setup()
         self._add_pin(pin)
 
+    # TEMPLATE: Change to LOW or HIGH of native_gpio or delete if not needed
+    def _native_high_or_low(self, value):
+        return native_gpio.HIGH if value else native_gpio.LOW
+
+    # TEMPLATE: run native GPIO cleanup() function if available
     def cleanup():
-        # TEMPLATE: run native GPIO cleanup() function if available
         native_gpio.cleanup()
 
 # wrapper is what will be imported by __init__.py

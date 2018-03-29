@@ -103,6 +103,12 @@ class GPIO:
         self.system = None
         self.native = None
 
+    def _native_high_or_low(self, value):
+        # Returns LOW or HIGH value from native_gpio if required
+
+        self._require_system_set()
+        # return native_gpio.HIGH if value else native_gpio.LOW
+
     def _require_system_set(self):
         if not self.system:
             raise errors.SystemNotSet("Please set your system first")
