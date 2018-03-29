@@ -66,6 +66,10 @@ class Pin:
         """
         return self._id
 
+    @id.setter
+    def id(self, value):
+        # Set self._id
+        self._id = value
 
     def input(self):
         # Get input value of pin from the native GPIO library

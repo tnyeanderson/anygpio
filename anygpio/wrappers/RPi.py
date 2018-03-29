@@ -21,6 +21,12 @@ native_gpio.setmode(native_gpio.BCM)
 # Derived Pin class
 # TEMPLATE: Each method in the Pin class must be changed to use the native_gpio module
 class Pin(anygpio.Pin):
+
+    # TEMPLATE: Change to what the native_gpio will accept as pin identifier
+    @property
+    def id(self):
+        return self.number
+
     def value(self):
         """
         Use this to return a curated, semantic value from the pins input

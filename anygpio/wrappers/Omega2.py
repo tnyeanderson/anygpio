@@ -16,6 +16,11 @@ except:
 
 # Generic Pin class
 class Pin(anygpio.Pin):
+    
+    @property
+    def id(self):
+        return self.number
+
     def value(self):
         """
         Use this to return a curated, semantic value from the pins input
