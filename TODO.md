@@ -7,6 +7,7 @@
 * Format and improve README
 * docstrings
 * dynamic wrapper.system from __file__
+* watch() check interval time
 
 Wrappers for:
   - BeagleBone
