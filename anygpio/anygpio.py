@@ -210,6 +210,7 @@ class GPIO:
                 finally:
                     # Reset self._watch
                     print("Broke out")
+                    break
                     self._watch = True
 
     def stop_watching(self):
