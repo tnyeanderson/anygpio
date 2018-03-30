@@ -1,5 +1,5 @@
 import sys, os
-import atexit
+import atexit, signal
 from importlib import import_module
 
 from . import errors
@@ -24,5 +24,9 @@ except:
 # Set GPIO to the wrapper returned from the SBC file
 this.GPIO = SBC.wrapper
 
-# Clean up on exit
+# Clean up on "clean" exit
 atexit.register(this.GPIO.cleanup)
+
+# Clean up on KILL signal
+signal.signal(signal.SIGTERM, this.GPIO.cleanup)
+signal.signal(signal.SIGINT, this.GPIO.cleanup)
