@@ -98,7 +98,8 @@ class Pin:
         # native_gpio.setup(self.id, native_gpio.OUT if self.is_output else native_gpio.IN)
 
     def destroy(self):
-        raise errors.SystemNotSet("Please set your system first")
+        # raise errors.SystemNotSet("Please set your system first")
+        wrapper.drop_pin(self)
 
 
 # Generic module class
@@ -136,7 +137,8 @@ class GPIO:
         self._remove_pin(pin)
 
     def _remove_pin(self, pin):
-        self.pins.remove(pin)
+        if pin and (pin in self.pins):
+            self.pins.remove(pin)
 
     def _find_pin_by_id(self, id):
         # Return pin from pins[] by id
