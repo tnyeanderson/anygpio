@@ -99,9 +99,6 @@ class Pin:
 
     def destroy(self):
         # raise errors.SystemNotSet("Please set your system first")
-        print(__name__)
-        print(this)
-        print(self)
         wrapper.drop_pin(self)
 
 

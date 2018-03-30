@@ -66,6 +66,10 @@ class Pin(anygpio.Pin):
         else:
             native_gpio.setup(self.id, native_gpio.IN, pull_up_down=(None if self.is_output else native_gpio.PUD_UP))
 
+    # TEMPLATE: Add native pin deconfig code before drop.pin
+    def destroy(self):
+        wrapper.drop_pin(self)
+
 class GPIO(anygpio.GPIO):
     # TEMPLATE: Change argument initial_value to the native_gpio.LOW value if needed
     def setup_pin(self, number, name=None, action=anygpio.do_nothing, is_output=False, initial_value=0):

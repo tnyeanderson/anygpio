@@ -58,6 +58,7 @@ class Pin(anygpio.Pin):
 
     def destroy(self):
         self.native._freeGpio()
+        wrapper.drop_pin(self)
 
 # Generic module class
 class GPIO(anygpio.GPIO):
