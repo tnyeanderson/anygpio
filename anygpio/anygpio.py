@@ -165,16 +165,16 @@ class GPIO:
 
         if id:
             # Searching by id
-            return _find_pin_by_id(id)
+            return self._find_pin_by_id(id)
 
         # Check datatype of query
         if isinstance(query, int):
             # If query is pin.number
-            return _find_pin_by_number(query)
+            return self._find_pin_by_number(query)
 
         else:
             # If query is pin.name
-            return _find_pin_by_name(query)
+            return self._find_pin_by_name(query)
 
     def cleanup():
         # Run the native GPIO cleanup() function if available
