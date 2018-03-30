@@ -16,7 +16,7 @@ except:
 
 # Generic Pin class
 class Pin(anygpio.Pin):
-    
+
     @property
     def id(self):
         return self.number
@@ -57,7 +57,7 @@ class Pin(anygpio.Pin):
 # Generic module class
 class GPIO(anygpio.GPIO):
     # This has to be here to use the derived Pin class for initialization
-    def setup_pin(self, name, number, action=anygpio.do_nothing, is_output=False, initial_value=0):
+    def setup_pin(self, number, name=None, action=anygpio.do_nothing, is_output=False, initial_value=0):
         # Use this to initialize a pin
         # Require the system to be set
         self._require_system_set()

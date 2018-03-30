@@ -68,7 +68,7 @@ class Pin(anygpio.Pin):
 
 class GPIO(anygpio.GPIO):
     # TEMPLATE: Change argument initial_value to the native_gpio.LOW value if needed
-    def setup_pin(self, name, number, action=anygpio.do_nothing, is_output=False, initial_value=0):
+    def setup_pin(self, number, name=None, action=anygpio.do_nothing, is_output=False, initial_value=0):
         # Use this to initialize a pin
         # Require the system to be set
         self._require_system_set()
