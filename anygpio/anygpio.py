@@ -137,6 +137,10 @@ class GPIO:
         self._require_system_set()
         self._remove_pin(pin)
 
+    def _destroy_all_pins(self):
+        for pin in self.pins:
+            pin.destroy()
+
     def _remove_pin(self, pin):
         if pin and (pin in self.pins):
             self.pins.remove(pin)
@@ -182,6 +186,7 @@ class GPIO:
     def cleanup():
         # Run the native GPIO cleanup() function if available
         self._require_system_set()
+        self._destroy_all_pins()
 
     def watch(self):
         # Watch all pins for their desired_value, and execute pin.action()

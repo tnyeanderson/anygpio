@@ -72,8 +72,7 @@ class GPIO(anygpio.GPIO):
         self._add_pin(pin)
 
     def cleanup(self):
-        for pin in self.pins:
-            pin.destroy()
+        self._destroy_all_pins()
 
 # wrapper is what will be imported by __init__.py
 wrapper = GPIO()
