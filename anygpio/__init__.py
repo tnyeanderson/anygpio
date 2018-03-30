@@ -24,10 +24,21 @@ except:
 # Set GPIO to the wrapper returned from the SBC file
 this.GPIO = SBC.wrapper
 
-def exit_handler(*_):
-    # Run cleanup() and exit
-    this.GPIO.cleanup()
-    sys.exit(0)
+class ExitHandler:
+    # Handles exits for anygpio by calling cleanup()
+    exiting = False
+
+    # Use *_ to "ignore" all arguments
+    def exit(self, *_):
+        # Set exiting flag to avoid multiple calls to this function
+        self.exiting = True
+
+        # If not already exiting
+        if self.exiting:
+            # Run cleanup()
+            this.GPIO.cleanup()
+
+exit_handler = ExitHandler()
 
 # Clean up on "clean" exit
 atexit.register(exit_handler)
