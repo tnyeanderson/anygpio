@@ -138,32 +138,43 @@ class GPIO:
     def _remove_pin(self, pin):
         self.pins.remove(pin)
 
-    def pin(self, query, id=None):
+    def _find_pin_by_id(self, id):
+        # Return pin from pins[] by id
+        for pin in self.pins:
+            if id == pin.id:
+                return pin
+        return False
+
+    def _find_pin_by_number(self, number):
+        # Return pin from pins[] by number
+        for pin in self.pins:
+            if number == pin.number:
+                return pin
+        return False
+
+    def _find_pin_by_name(self, name):
+        # Return pin from pins[] by name
+        for pin in self.pins:
+            if query == pin.name:
+                return pin
+        return False
+
+    def pin(self, query=None, id=None):
         # Find a pin in the pins array
         # query could be pin.name or pin.number
 
         if id:
-            # If searching by id
-            for pin in self.pins:
-                if id == pin.id:
-                    return pin
-            return False
-
+            # Searching by id
+            return _find_pin_by_id(id)
 
         # Check datatype of query
         if isinstance(query, int):
             # If query is pin.number
-            for pin in self.pins:
-                if query == pin.number:
-                    return pin
+            return _find_pin_by_number(query)
+
         else:
             # If query is pin.name
-            for pin in self.pins:
-                if query == pin.name:
-                    return pin
-
-        # If pin is not found
-        return False
+            return _find_pin_by_name(query)
 
     def cleanup():
         # Run the native GPIO cleanup() function if available
