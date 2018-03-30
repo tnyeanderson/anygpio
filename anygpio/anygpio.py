@@ -98,8 +98,8 @@ class Pin:
         # native_gpio.setup(self.id, native_gpio.OUT if self.is_output else native_gpio.IN)
 
     def destroy(self):
-        # raise errors.SystemNotSet("Please set your system first")
-        wrapper.drop_pin(self)
+        raise errors.SystemNotSet("Please set your system first")
+        # wrapper.drop_pin(self)
 
 
 # Generic module class
@@ -129,6 +129,7 @@ class GPIO:
         self._add_pin(pin)
 
     def _add_pin(self, pin):
+        self.drop_pin(self.pin(id=pin.id))
         self.pins.append(pin)
 
     def drop_pin(self, pin):

@@ -1,5 +1,4 @@
 * Better ImportError handling
-* Destroy if pin already exists in setup_pin
 * Better differentiation between SystemNotSet and NotSupportedOnSystem
 * supports.read_output_pin
 * supports.available_pins or ground_pins
@@ -8,6 +7,7 @@
 * Pull up and pull down resistor setting
 * Format and improve README
 * docstrings
+* dynamic wrapper.system from __name__
 
 Wrappers for:
   - BeagleBone
