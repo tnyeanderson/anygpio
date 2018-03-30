@@ -155,7 +155,7 @@ class GPIO:
     def _find_pin_by_name(self, name):
         # Return pin from pins[] by name
         for pin in self.pins:
-            if query == pin.name:
+            if name == pin.name:
                 return pin
         return False
 
