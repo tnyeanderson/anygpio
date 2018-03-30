@@ -139,7 +139,7 @@ class GPIO:
 
     def _destroy_all_pins(self):
         while self.pins:
-            pin[0].destroy()
+            self.pins[0].destroy()
 
     def _remove_pin(self, pin):
         if pin and (pin in self.pins):
