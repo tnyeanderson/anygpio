@@ -8,6 +8,7 @@
 * docstrings
 * dynamic wrapper.system from __file__
 * watch() check interval time
+* Fix exiting on ctrl+c during watch()
 
 Wrappers for:
   - BeagleBone

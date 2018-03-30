@@ -33,7 +33,7 @@ class ExitHandler:
         self.exiting = True
 
         # If not already exiting
-        if self.exiting:
+        if not self.exiting:
             print("Exiting!")
             this.GPIO.stop_watching()
             # Run cleanup()
