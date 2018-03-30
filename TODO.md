@@ -6,7 +6,7 @@
 * Pull up and pull down resistor setting
 * Format and improve README
 * docstrings
-* dynamic wrapper.system from __name__
+* dynamic wrapper.system from __file__
 
 Wrappers for:
   - BeagleBone
