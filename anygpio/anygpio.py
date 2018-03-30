@@ -1,5 +1,5 @@
-import sys
-import os
+import sys, os, time
+
 from . import errors
 
 # Requrire sudo
@@ -191,7 +191,7 @@ class GPIO:
         self._require_system_set()
         self._destroy_all_pins()
 
-    def watch(self):
+    def watch(self, interval=2):
         # Watch all pins for their desired_value, and execute pin.action()
         # Stops only with a KeyboardInterrupt or by killing the process!
 
@@ -208,9 +208,12 @@ class GPIO:
                 # Break out of loop gracefully
                 print("Breaking out of watch()")
                 break
+            finally:
+                print("Looping")
+                time.sleep(interval)
 
         print("Broke out")
-        
+
         # Reset self._watch
         self._watch = True
 
