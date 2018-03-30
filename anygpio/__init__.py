@@ -41,8 +41,8 @@ class ExitHandler:
 exit_handler = ExitHandler()
 
 # Clean up on "clean" exit
-atexit.register(exit_handler)
+atexit.register(exit_handler.exit)
 
 # Clean up on KILL signal
-signal.signal(signal.SIGTERM, exit_handler)
-signal.signal(signal.SIGINT, exit_handler)
+signal.signal(signal.SIGTERM, exit_handler.exit)
+signal.signal(signal.SIGINT, exit_handler.exit)
