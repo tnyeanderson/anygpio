@@ -29,7 +29,6 @@ class ExitHandler:
 
     # Use *_ to "ignore" all arguments
     def exit(self, *_):
-        print("Running .exit()")
         # Set exiting flag to avoid multiple calls to this function
         self.exiting = True
 
@@ -38,7 +37,7 @@ class ExitHandler:
             print("Exiting!")
             this.GPIO.stop_watching()
             # Run cleanup()
-            this.GPIO.cleanup()
+            # this.GPIO.cleanup()
             # os._exit(0)
 
 exit_handler = ExitHandler()
