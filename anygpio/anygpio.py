@@ -206,9 +206,10 @@ class GPIO:
                         pin.action()
         except KeyboardInterrupt:
             # Break out of loop gracefully
-            print("Breaking out of watch()")
+            pass
         finally:
             # Reset self._watch
+            print("Broke out")
             self._watch = True
 
     def stop_watching(self):
