@@ -89,7 +89,7 @@ class GPIO(anygpio.GPIO):
         self._destroy_all_pins()
 
         # TEMPLATE: run native GPIO cleanup() function if available
-        self.native_gpio.cleanup()
+        native_gpio.cleanup()
 
 # wrapper is what will be imported by __init__.py
 wrapper = GPIO()
