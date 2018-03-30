@@ -38,7 +38,7 @@ class ExitHandler:
             print("Exiting!")
             # Run cleanup()
             this.GPIO.cleanup()
-            os._exit(0)
+            # os._exit(0)
 
 exit_handler = ExitHandler()
 
