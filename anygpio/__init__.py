@@ -24,11 +24,14 @@ except:
 # Set GPIO to the wrapper returned from the SBC file
 this.GPIO = SBC.wrapper
 
-this.onexit = lambda *_: this.GPIO.cleanup()
+def exit_handler(*_):
+    # Run cleanup() and exit
+    this.GPIO.cleanup()
+    sys.exit(0)
 
 # Clean up on "clean" exit
-atexit.register(this.onexit)
+atexit.register(exit_handler)
 
 # Clean up on KILL signal
-signal.signal(signal.SIGTERM, this.onexit)
-signal.signal(signal.SIGINT, this.onexit)
+signal.signal(signal.SIGTERM, exit_handler)
+signal.signal(signal.SIGINT, exit_handler)
