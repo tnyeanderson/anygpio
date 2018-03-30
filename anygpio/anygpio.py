@@ -183,7 +183,7 @@ class GPIO:
             # If query is pin.name
             return self._find_pin_by_name(query)
 
-    def cleanup():
+    def cleanup(self):
         # Run the native GPIO cleanup() function if available
         self._require_system_set()
         self._destroy_all_pins()

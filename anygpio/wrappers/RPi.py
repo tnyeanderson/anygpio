@@ -85,11 +85,11 @@ class GPIO(anygpio.GPIO):
     def _native_high_or_low(self, value):
         return native_gpio.HIGH if value else native_gpio.LOW
 
-    def cleanup():
+    def cleanup(self):
         self._destroy_all_pins()
 
         # TEMPLATE: run native GPIO cleanup() function if available
-        native_gpio.cleanup()
+        self.native_gpio.cleanup()
 
 # wrapper is what will be imported by __init__.py
 wrapper = GPIO()
