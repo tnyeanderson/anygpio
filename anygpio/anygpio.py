@@ -195,15 +195,17 @@ class GPIO:
         # Watch all pins for their desired_value, and execute pin.action()
         # Stops only with a KeyboardInterrupt or by killing the process!
 
-        try:
-            while self._watch:
-                for pin in self.pins:
-                    if pin.value() == pin.desired_value:
-                        pin.action()
-        except KeyboardInterrupt:
-            print("Stopped watching...")
-        finally:
-            self._watch = True
+        # Set self._watch to handle stop_watching() without watch() first
+        self._watch = True
+
+        # Loop through each pin checking its value()
+        while self._watch:
+            for pin in self.pins:
+                if pin.value() == pin.desired_value:
+                    pin.action()
+
+        # Reset self._watch
+        self._watch = True
 
     def stop_watching(self):
         self._watch = False
