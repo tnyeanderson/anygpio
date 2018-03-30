@@ -204,6 +204,8 @@ class GPIO:
             try:
                 time.sleep(interval)
                 for pin in self.pins:
+                    print(pin.value())
+                    print(pin.desired_value)
                     if pin.value() == pin.desired_value:
                         pin.action()
             except KeyboardInterrupt:
