@@ -1,5 +1,4 @@
-import sys, os
-import atexit, signal
+import sys, os, signal
 from importlib import import_module
 
 from . import errors
@@ -30,6 +29,7 @@ class ExitHandler:
 
     # Use *_ to "ignore" all arguments
     def exit(self, *_):
+        print("Running .exit()")
         # Set exiting flag to avoid multiple calls to this function
         self.exiting = True
 
@@ -41,9 +41,6 @@ class ExitHandler:
             os._exit(0)
 
 exit_handler = ExitHandler()
-
-# Clean up on "clean" exit
-atexit.register(exit_handler.exit)
 
 # Clean up on KILL signal
 signal.signal(signal.SIGTERM, exit_handler.exit)
