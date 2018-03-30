@@ -111,6 +111,9 @@ class GPIO:
         self.system = None
         self.native = None
 
+        # Used for stop_watching()
+        self._watch = True
+
     def _native_high_or_low(self, value):
         # Returns LOW or HIGH value from native_gpio if required
 
@@ -191,7 +194,11 @@ class GPIO:
     def watch(self):
         # Watch all pins for their desired_value, and execute pin.action()
         # Stops only with a KeyboardInterrupt or by killing the process!
-        while True:
+        while self._watch:
             for pin in self.pins:
                 if pin.value() == pin.desired_value:
                     pin.action()
+        self._watch = True
+
+    def stop_watching(self):
+        self._watch = False
