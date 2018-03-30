@@ -24,6 +24,7 @@ class Pin:
         # User defined pin name
         self.name = name
 
+        # self.id private variable
         self._id = None
 
         # Pin ID as identified by native_gpio

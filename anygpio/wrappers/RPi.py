@@ -27,6 +27,12 @@ class Pin(anygpio.Pin):
     def id(self):
         return self.number
 
+    # TEMPLATE: Use this to update any other variables (pin.number, pin.header)
+    @id.setter
+    def id(self, value):
+        # Set self._id
+        self.number = value
+
     def value(self):
         """
         Use this to return a curated, semantic value from the pins input

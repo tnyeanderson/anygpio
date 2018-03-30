@@ -7,6 +7,7 @@
 * GPIO.destroy() on exit
 * Pull up and pull down resistor setting
 * Format and improve README
+* docstrings
 
 Wrappers for:
   - BeagleBone
