@@ -3,7 +3,6 @@
 * supports.read_output_pin
 * supports.available_pins or ground_pins
 * Packagify wrappers?
-* GPIO.destroy() on exit
 * Pull up and pull down resistor setting
 * Format and improve README
 * docstrings
