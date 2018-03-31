@@ -290,7 +290,7 @@ class GPIO:
 			For example, see ExitHandler.exit()
 		"""
 
-		Set self._watch to handle stop_watching() without watch() first
+		# Set self._watch to handle stop_watching() without watch() first
 		self._watching = True
 
 		# Loop through each pin checking its value()
