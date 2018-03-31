@@ -29,12 +29,16 @@ class ExitHandler:
 
     # Use *_ to "ignore" all arguments
     def exit(self, *_):
+        # If watch() is running, just stop_watching()
+        if (this.GPIO._watching):
+            this.GPIO.stop_watching()
+            return
 
         # If not already exiting
         if not self.exiting:
             # Set exiting flag to avoid multiple calls to this function
             self.exiting = True
-            
+
             print("Exiting!")
             this.GPIO.stop_watching()
             # Run cleanup()
