@@ -24,20 +24,30 @@ except:
 this.GPIO = SBC.wrapper
 
 class ExitHandler:
-	# Handles exits for anygpio by calling cleanup()
+	"""
+	Handles exits for anygpio by calling cleanup()
+	"""
 	exiting = False
 
 	# Store original sigint handler to prevent exit if _watching
 	original_handler = signal.getsignal(signal.SIGINT)
 
 	def register_exit_handlers(self):
-		# Clean up on KILL signal
+		"""
+		Clean up GPIO data on SIGTERM or SIGINT
+		"""
 		signal.signal(signal.SIGTERM, self.exit)
 		signal.signal(signal.SIGINT, self.exit)
 
 
 	# Use *_ to "ignore" all arguments
 	def exit(self, *_):
+		"""
+		Contains tasks to be completed just before exiting
+
+		Also currently contains the only stop watching check, which
+			should be its own method
+		"""
 		print("Running exit()")
 		# If watch() is running, just stop_watching()
 		if (this.GPIO._watching):
