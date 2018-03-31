@@ -38,7 +38,6 @@ class ExitHandler:
 
     # Use *_ to "ignore" all arguments
     def exit(self, *_):
-        import pdb; pdb.set_trace()
         print("Running exit()")
         # If watch() is running, just stop_watching()
         if (this.GPIO._watching):
