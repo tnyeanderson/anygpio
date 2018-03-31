@@ -4,8 +4,7 @@
 * supports.available_pins or ground_pins
 * Packagify wrappers?
 * Pull up and pull down resistor setting
-* Format and improve README
-* docstrings
+* Improve README
 
 Wrappers for:
   - BeagleBone

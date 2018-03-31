@@ -13,59 +13,97 @@ Just use `anygpio/wrappers/RPi.py` as a template. All you need to change is a fe
 
 Currently, this library requires you to change __init__.py to import your SBC's corresponding wrapper file. This is not ideal. There are plans in the future to create a separate python package that will be used to identify the current SBC in use, and this library will use that to import the corresponding wrapper file.
 
+---
+
 # Getting Started
 
 ```
 from anygpio import GPIO
+```
 
-# Pins are initialized to inputs by default
+
+
+Pins are initialized to inputs by default
+```
 GPIO.setup_pin(18, "MY_BUTTON", my_button_pressed_function)
+```
 
-# Return a pin from the pin array
+---
+
+Return a `pin` from the `pin` array
+```
 GPIO.pin(18)
 GPIO.pin("MY_BUTTON")
+```
 
-"""
-id is what will be passed to the Native GPIO library to identify the pin.
+---
 
-In RPi, this is just pin.number but on other systems (like BeagleBone) it is a combination of pin.number and pin.header ("p9_10") or something else entirely (C.H.I.P)!
-"""
+In `GPIO.pin()`, `id` is what will be passed to the Native GPIO library to identify the pin.
+
+In RPi, this is just `pin.number` but on other systems (like BeagleBone) it is a combination of `pin.number` and `pin.header` (`'p9_10'`) or something else entirely (C.H.I.P)!
+```
 GPIO.pin(id=18)
+```
 
-"""
-Curated input value. Buttons should be 1 (True) when pressed, and 0 (False) when not pressed
+---
 
-returns: 0
-"""
+Curated input value. Buttons should be `1` (True) when pressed, and `0` (False) when not pressed
+```
+# returns: 0
 print(GPIO.pin(18).value())
+```
 
-# Actual input value
+---
+
+Actual input value
+```
 # returns: 1
 print(GPIO.pin(18).input())
+```
 
-"""
-Watch all the pins for their desired_value and run their respective functions if they match
+---
 
-If pin 18 is hooked up to a button and the button is pressed, my_button_pressed_function() will be run
+Watch all the pins for their `desired_value` and run their respective `action` methods if they match
 
-This can only be stopped by killing the process or a KeyboardInterrupt
-"""
+If pin 18 is hooked up to a button and the button is pressed, `my_button_pressed_function()` will be run
+
+Stops only with a `KeyboardInterrupt`, changing `_watching` to `False`,
+	or by killing the process!
+
+Can also call `stop_watching()` from signal triggered process. For an example, see `ExitHandler.exit()`
+```
 GPIO.watch()
+```
 
+---
 
-# Set up output pin
-# Default initial value is always 0 (LOW) unless set here
+Set up output pin
+Default initial value is always `0` (LOW) unless set here
+```
 GPIO.setup_pin(18, "MY_OUTPUTTER", is_output=True, initial_value=1)
+```
 
-# Output LOW to a pin
+---
+
+Output LOW to a pin
+```
 GPIO.pin(18).output(0)
+```
 
-# Output HIGH to a pin
+---
+
+Output HIGH to a pin
+```
 GPIO.pin(18).output(1)
+```
 
+---
 
-# Run native GPIO cleanup functions
+Run native GPIO cleanup functions
+```
 GPIO.destroy()
 ```
+
+---
 
 *Better docs, more wrappers, and more features to come!*
