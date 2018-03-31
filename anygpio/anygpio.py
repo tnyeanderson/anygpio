@@ -112,7 +112,7 @@ class GPIO:
         self.native = None
 
         # Used for stop_watching()
-        self._watch = True
+        self._watching = False
 
     def _native_high_or_low(self, value):
         # Returns LOW or HIGH value from native_gpio if required
