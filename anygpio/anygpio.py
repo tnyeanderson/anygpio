@@ -34,7 +34,7 @@ class Pin:
 		name			User defined pin name
 		_id				self.id private variable
 		id				Pin ID as identified by native_gpio
-							Could be int (01) or could be string ("p9_10")
+							Could be int (10) or could be string ("p9_10")
 		number			Pin number as integer
 							Used as id on systems such as RPi and Omega2
 							Used in combination with header info for BeagleBone
@@ -128,11 +128,83 @@ class Pin:
 
 	def destroy(self):
 		"""
-		Remove pin configuration from GPIO.pins and native_gpio
+		Remove pin configuration through native pin object then drop pin
 
-		Calls GPIO.drop_pin()
+		Subsequently calls GPIO.drop_pin()
 		"""
 		raise errors.SystemNotSet("Please set your system first")
+		# wrapper.drop_pin(self)
+
+
+# Generic PWM Pin class
+class PWMPin(Pin):
+	"""
+	Base class for storing GPIO pin configurations and related methods
+
+	Attributes:
+		frequency		Array of configured pins
+		duty_cycle		Stores Support() instance for system-wide support configurations
+		_running		Is pwm running on this pin?
+	"""
+
+	frequency = None
+	duty_cycle = None
+	_running = False
+
+	def setup(self, frequency=self.frequency, duty_cycle=self.duty_cycle):
+		"""
+		Initialize the PWM pin with the native_gpio
+		"""
+		# Set attributes to parameters
+		self.frequency = frequency
+		self.duty_cycle = duty_cycle
+
+		# Raise error since this should be overridden by wrapper derived class
+		raise errors.SystemNotSet("Please set your system first")
+
+		# Setup the native pin
+		# self.native = native_gpio.PWM(self.id, self.frequency)
+
+	def start(self, duty_cycle=self.duty_cycle):
+		"""
+		Start PWM at specified duty_cycle
+		"""
+
+		# Set attributes to parameters
+		self.duty_cycle = duty_cycle
+
+		# Raise error since this should be overridden by wrapper derived class
+		raise errors.SystemNotSet("Please set your system first")
+
+
+		# Start PWM on the native_gpio
+		# self.native.start(self.duty_cycle)
+
+		# PWM is running
+		self._running = True
+
+	def stop(self):
+		"""
+		Stop PWM
+		"""
+
+		# Raise error since this should be overridden by wrapper derived class
+		raise errors.SystemNotSet("Please set your system first")
+
+		# Stop PWM on the native_gpio
+		#self.native.stop()
+
+		# PWM is not running
+		self._running = False
+
+	def destroy(self):
+		"""
+		Remove PWM pin configuration through native pin object then drop pin
+
+		Stops PWM on pin, deconfigs, then calls GPIO.drop_pin()
+		"""
+		raise errors.SystemNotSet("Please set your system first")
+		# pwm.stop()
 		# wrapper.drop_pin(self)
 
 
@@ -177,14 +249,14 @@ class GPIO:
 		if not self.system:
 			raise errors.SystemNotSet("Please set your system first")
 
-	def setup_pin(self, name, number, action=do_nothing, is_output=False):
+	def setup_pin(self, number, name=None, action=do_nothing, is_output=False):
 		"""
 		Use this to initialize a pin
 
 		Pins should call their own setup()
 		"""
 		self._require_system_set()
-		pin = Pin(name, number, action, is_output)
+		pin = Pin(number, name, action, is_output)
 		pin.setup()
 		self._add_pin(pin)
 
@@ -221,6 +293,18 @@ class GPIO:
 		"""
 		if pin and (pin in self.pins):
 			self.pins.remove(pin)
+
+	def PWM(self, number, freqency, duty_cycle=0, name=None):
+		"""
+		Use this to initialize a PWM pin
+
+		Use explicit argument for name
+		PWM pins should call their own setup()
+		"""
+		self._require_system_set()
+		pwm_pin = PWMPin(number, name)
+		pwm_pin.setup(frequency, duty_cycle)
+		_add_pin(pwm_pin)
 
 	def _find_pin_by_id(self, id):
 		"""

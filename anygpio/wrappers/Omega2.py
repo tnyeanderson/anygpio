@@ -68,7 +68,7 @@ class GPIO(anygpio.GPIO):
 		# Use this to initialize a pin
 		# Require the system to be set
 		self._require_system_set()
-		pin = Pin(name, number, action, is_output, initial_value)
+		pin = Pin(number, name, action, is_output, initial_value)
 		pin.setup()
 		self._add_pin(pin)
 
