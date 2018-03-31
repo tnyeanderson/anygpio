@@ -1,4 +1,5 @@
 import importlib
+from pathlib import Path
 
 from .. import anygpio
 from .. import errors
@@ -78,7 +79,7 @@ class GPIO(anygpio.GPIO):
 wrapper = GPIO()
 
 # Set the system to the name of the file
-wrapper.system = "Omega2"
+wrapper.system = Path(__file__).stem
 
 # Link the native GPIO library so it can be accessed directly
 wrapper.native = native_gpio
