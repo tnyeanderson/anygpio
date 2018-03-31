@@ -27,11 +27,17 @@ class ExitHandler:
     # Handles exits for anygpio by calling cleanup()
     exiting = False
 
+    def register_exit_handlers(self):
+        # Clean up on KILL signal
+        signal.signal(signal.SIGTERM, self.exit)
+
+
     # Use *_ to "ignore" all arguments
     def exit(self, *_):
         # If watch() is running, just stop_watching()
         if (this.GPIO._watching):
             this.GPIO.stop_watching()
+            signal.signal(signal.SIGINT, self.exit)
             return
 
         # If not already exiting
@@ -47,6 +53,4 @@ class ExitHandler:
 
 exit_handler = ExitHandler()
 
-# Clean up on KILL signal
-signal.signal(signal.SIGTERM, exit_handler.exit)
-signal.signal(signal.SIGINT, exit_handler.exit)
+exit_handler.register_exit_handlers()

@@ -198,20 +198,16 @@ class GPIO:
         # Set self._watch to handle stop_watching() without watch() first
         self._watching = True
 
-        try:
-            # Loop through each pin checking its value()
-            while self._watching:
-                print("Looping")
-                time.sleep(interval)
-                for pin in self.pins:
-                    if pin.value() == pin.desired_value:
-                        pin.action()
-        except KeyboardInterrupt:
-            # Break out of loop gracefully
-            print("Breaking out of watch()")
-            self.stop_watching()
-        finally:
-            print("Broke out")
+        # Loop through each pin checking its value()
+        while self._watching:
+            print("Looping")
+            time.sleep(interval)
+            for pin in self.pins:
+                if pin.value() == pin.desired_value:
+                    pin.action()
+
+        print("Broke out")
+        self._watching = False
 
     def stop_watching(self):
         self._watching = False
