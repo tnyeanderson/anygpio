@@ -11,7 +11,7 @@ This project is designed to be modular and accessible. It provides access to any
 
 Just use `anygpio/wrappers/RPi.py` as a template. All you need to change is a few lines to contribute!
 
-Currently, this library requires you to change __init__.py to import your SBC's corresponding wrapper file. This is not ideal. There are plans in the future to create a separate python package that will be used to identify the current SBC in use, and this library will use that to import the corresponding wrapper file.
+Currently, this library requires you to change `__init__.py` to import your SBC's corresponding wrapper file. This is not ideal. There are plans in the future to create a separate python package that will be used to identify the current SBC in use, and this library will use that to import the corresponding wrapper file.
 
 ---
 
@@ -26,6 +26,10 @@ from anygpio import GPIO
 Pins are initialized to inputs by default
 ```
 GPIO.setup_pin(18, "MY_BUTTON", my_button_pressed_function)
+```
+or, more simply:
+```
+GPIO.setup_pin(18)
 ```
 
 ---
