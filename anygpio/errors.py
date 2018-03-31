@@ -1,12 +1,26 @@
 # Error definitions
 class SystemNotSet(Exception):
-    pass
+	"""
+	Thrown when GPIO.system is not set
+	"""
+	pass
 
 class WrongPinType(Exception):
-    pass
+	"""
+	Thrown when trying to output() to an input pin, and vice versa
+	"""
+	pass
 
 class NoNativeGPIO(Exception):
-    pass
+	"""
+	Thrown when there is no Native GPIO python library installed
+
+	Example: RPi.GPIO is not installed
+	"""
+	pass
 
 class WrapperError(Exception):
-    pass
+	"""
+	Generic exception regarding GPIO wrapper
+	"""
+	pass
