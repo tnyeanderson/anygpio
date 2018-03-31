@@ -30,6 +30,7 @@ class ExitHandler:
     def register_exit_handlers(self):
         # Clean up on KILL signal
         signal.signal(signal.SIGTERM, self.exit)
+        signal.signal(signal.SIGINT, self.exit)
 
 
     # Use *_ to "ignore" all arguments
