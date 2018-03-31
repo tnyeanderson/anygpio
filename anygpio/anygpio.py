@@ -199,12 +199,16 @@ class GPIO:
         self._watching = True
 
         # Loop through each pin checking its value()
-        while self._watching:
-            print("Looping")
-            time.sleep(interval)
-            for pin in self.pins:
-                if pin.value() == pin.desired_value:
-                    pin.action()
+        try:
+            while self._watching:
+                print("Looping")
+                time.sleep(interval)
+                for pin in self.pins:
+                    if pin.value() == pin.desired_value:
+                        pin.action()
+        except KeyboardInterrupt:
+            print("Breaking out of watch()")
+            self.stop_watching()
 
         print("Broke out")
         self._watching = False
