@@ -9,6 +9,7 @@
 * dynamic wrapper.system from __file__
 * watch() check interval time
 * Fix exiting on ctrl+c during watch()
+* Fix desired_value
 
 Wrappers for:
   - BeagleBone
