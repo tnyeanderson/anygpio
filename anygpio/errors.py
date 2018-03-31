@@ -1,12 +1,12 @@
 # Error definitions
 class SystemNotSet(Exception):
-    pass
+	pass
 
 class WrongPinType(Exception):
-    pass
+	pass
 
 class NoNativeGPIO(Exception):
-    pass
+	pass
 
 class WrapperError(Exception):
-    pass
+	pass
