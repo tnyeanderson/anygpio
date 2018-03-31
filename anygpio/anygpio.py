@@ -44,7 +44,7 @@ class Pin:
         self.is_analog = False
         self.is_output = is_output
         self.action = action
-        self.desired_value = True
+        self.desired_value = 1
         self.initial_value = initial_value
         self.supports = Supports()
         # Stores native GPIO pin objects
