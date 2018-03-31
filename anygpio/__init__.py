@@ -52,11 +52,11 @@ class ExitHandler:
             # Set exiting flag to avoid multiple calls to this function
             self.exiting = True
 
-            print("Exiting!")
+            print("Exiting cleanly...")
             this.GPIO.stop_watching()
             # Run cleanup()
             this.GPIO.cleanup()
-            # os._exit(0)
+            sys.exit(0)
 
 exit_handler = ExitHandler()
 
