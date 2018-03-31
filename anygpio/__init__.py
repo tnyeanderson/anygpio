@@ -48,10 +48,8 @@ class ExitHandler:
 		Also currently contains the only stop watching check, which
 			should be its own method
 		"""
-		print("Running exit()")
 		# If watch() is running, just stop_watching()
 		if (this.GPIO._watching):
-			print("Only stop_watching")
 			this.GPIO.stop_watching()
 			signal.signal(signal.SIGINT, self.original_handler)
 			self.register_exit_handlers()
