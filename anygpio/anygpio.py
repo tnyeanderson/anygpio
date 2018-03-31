@@ -119,6 +119,14 @@ class Pin:
 		else:
 			raise errors.WrongPinType("Pin is set to input")
 
+	def test(self):
+		"""
+		Returns whether value() is equal to desired_value
+
+		Used for GPIO.watch()
+		"""
+		return (self.value() == self.desired_value)
+
 	def setup(self):
 		"""
 		Initialize the pin with the native_gpio
@@ -386,7 +394,7 @@ class GPIO:
 
 				# Check each pin
 				for pin in self.pins:
-					if pin.value() == pin.desired_value:
+					if pin.test():
 						pin.action()
 		except KeyboardInterrupt:
 			# This is currently not being used, see signal.signal
