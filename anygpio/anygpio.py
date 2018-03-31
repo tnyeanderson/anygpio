@@ -191,7 +191,7 @@ class GPIO:
         self._require_system_set()
         self._destroy_all_pins()
 
-    def watch(self, interval=2):
+    def watch(self, interval=0.15):
         # Watch all pins for their desired_value, and execute pin.action()
         # Stops only with a KeyboardInterrupt or by killing the process!
 
@@ -201,7 +201,6 @@ class GPIO:
         # Loop through each pin checking its value()
         try:
             while self._watching:
-                print("Looping")
                 time.sleep(interval)
                 for pin in self.pins:
                     if pin.value() == pin.desired_value:
