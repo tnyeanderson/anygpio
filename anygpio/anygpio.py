@@ -266,14 +266,14 @@ class GPIO:
 		if not self.system:
 			raise errors.SystemNotSet("Please set your system first")
 
-	def setup_pin(self, number, name=None, action=do_nothing, is_output=False):
+	def setup_pin(self, number, name=None, action=do_nothing, header=None is_output=False):
 		"""
 		Use this to initialize a pin
 
 		Pins should call their own setup()
 		"""
 		self._require_system_set()
-		pin = Pin(number, name, action, is_output)
+		pin = Pin(number, name, action, header, is_output)
 		pin.setup()
 		self._add_pin(pin)
 
@@ -319,6 +319,8 @@ class GPIO:
 		PWM pins should call their own setup()
 		"""
 		self._require_system_set()
+
+		self.setup_pin(number, name, is_output=True)
 
 		if not self.supports.pwm:
 			raise GPIOFunctionNotSupported("PWM is not supported...")

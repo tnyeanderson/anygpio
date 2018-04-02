@@ -124,7 +124,7 @@ class GPIO(anygpio.GPIO):
 		# Require the system to be set
 		self._require_system_set()
 		# Create a pin
-		pin = RPi_Pin(number, name, action, is_output, initial_value)
+		pin = RPi_Pin(number, name, action, header, is_output, initial_value)
 		pin.setup()
 		self._add_pin(pin)
 
