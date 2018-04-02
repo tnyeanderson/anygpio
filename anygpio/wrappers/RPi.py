@@ -43,7 +43,7 @@ class Pin(anygpio.Pin):
 		native			Native GPIO pin object if applicable
 	"""
 
-	def __init__(self, number, name=None, action=do_nothing, **kwargs):
+	def __init__(self, number, name=None, action=anygpio.do_nothing, **kwargs):
 		"""
 		Sets default values and constructs instance of Pin
 		"""
