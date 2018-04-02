@@ -140,7 +140,7 @@ class InputPin(Pin):
 
 
 # Generic OutputPin class
-class OutputPin(Pin)
+class OutputPin(Pin):
 	"""
 	Derived class for storing GPIO input pin configurations and related methods
 
