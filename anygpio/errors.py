@@ -24,3 +24,9 @@ class WrapperError(Exception):
 	Generic exception regarding GPIO wrapper
 	"""
 	pass
+
+class GPIOFunctionNotSupported(Exception):
+	"""
+	Generic exception regarding GPIO function support
+	"""
+	pass

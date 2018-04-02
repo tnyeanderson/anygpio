@@ -15,7 +15,7 @@ try:
 except:
 	raise errors.NoNativeGPIO("Could not import " + native_gpio_name)
 
-# Generic Pin class
+# Derived Pin class
 class Pin(anygpio.Pin):
 
 	@property
@@ -61,7 +61,43 @@ class Pin(anygpio.Pin):
 		self.native._freeGpio()
 		wrapper.drop_pin(self)
 
-# Generic module class
+# Derived PWM Pin class
+class PWMPin(Pin):
+	def setup(self, frequency=self.frequency, duty_cycle=self.duty_cycle):
+		"""
+		Initialize the PWM pin with the native_gpio
+		"""
+		# Set attributes to parameters
+		self.frequency = frequency
+		self.duty_cycle = duty_cycle
+
+		# Setup the native pin
+		self.native = native_gpio.PWM(self.id, self.frequency)
+
+	def start(self, duty_cycle=self.duty_cycle):
+
+		# Set attributes to parameters
+		self.duty_cycle = duty_cycle
+
+		# Start PWM on the native_gpio
+		self.native.start(self.duty_cycle)
+
+		# PWM is running
+		self._running = True
+
+	def stop(self):
+
+		# Stop PWM on the native_gpio
+		self.native.stop()
+
+		# PWM is not running
+		self._running = False
+
+	def destroy(self):
+		self.stop()
+		wrapper.drop_pin(self)
+
+# Derived module class
 class GPIO(anygpio.GPIO):
 	# This has to be here to use the derived Pin class for initialization
 	def setup_pin(self, number, name=None, action=anygpio.do_nothing, is_output=False, initial_value=0):
@@ -75,8 +111,14 @@ class GPIO(anygpio.GPIO):
 	def cleanup(self):
 		self._destroy_all_pins()
 
+
 # wrapper is what will be imported by __init__.py
 wrapper = GPIO()
+
+
+# Set GPIO Supports:
+GPIO.supports.pwm = False
+
 
 # Set the system to the name of the file
 wrapper.system = Path(__file__).stem

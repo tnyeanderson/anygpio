@@ -103,6 +103,35 @@ GPIO.pin(18).output(1)
 
 ---
 
+Set up PWM pin
+```
+GPIO.PWM(18, 1000, name="MY_PWM")
+```
+
+---
+
+Start PWM on a pin
+```
+GPIO.pin(18).start(50)
+```
+
+---
+
+Stop PWM on a pin
+```
+GPIO.pin(18).stop()
+```
+
+---
+
+Change Duty Cycle on PWM pin
+```
+GPIO.pin(18).change_duty_cycle(75)
+```
+
+---
+
+
 Run native GPIO cleanup functions
 ```
 GPIO.destroy()

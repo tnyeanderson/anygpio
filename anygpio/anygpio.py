@@ -22,8 +22,7 @@ class Supports:
 
 	In the future, this will contain pwm, pull_up_down, etc
 	"""
-	def __init__(self):
-		pass
+	pwm = False
 
 # Generic Pin class
 class Pin:
@@ -205,6 +204,17 @@ class PWMPin(Pin):
 		# PWM is not running
 		self._running = False
 
+	def change_duty_cycle(self, value):
+		"""
+		Update the PWM duty cycle
+		"""
+
+		# Raise error since this should be overridden by wrapper derived class
+		raise errors.SystemNotSet("Please set your system first")
+
+		# Run native ChangeDutyCycle function
+		# self.native.ChangeDutyCycle(value)
+
 	def destroy(self):
 		"""
 		Remove PWM pin configuration through native pin object then drop pin
@@ -212,7 +222,7 @@ class PWMPin(Pin):
 		Stops PWM on pin, deconfigs, then calls GPIO.drop_pin()
 		"""
 		raise errors.SystemNotSet("Please set your system first")
-		# pwm.stop()
+		# self.stop()
 		# wrapper.drop_pin(self)
 
 
@@ -310,6 +320,10 @@ class GPIO:
 		PWM pins should call their own setup()
 		"""
 		self._require_system_set()
+
+		if not self.supports.pwm:
+			raise GPIOFunctionNotSupported("PWM is not supported...")
+
 		pwm_pin = PWMPin(number, name)
 		pwm_pin.setup(frequency, duty_cycle)
 		_add_pin(pwm_pin)

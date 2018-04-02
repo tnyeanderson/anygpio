@@ -71,6 +71,53 @@ class Pin(anygpio.Pin):
 	def destroy(self):
 		wrapper.drop_pin(self)
 
+
+# Generic PWM Pin class
+class PWMPin(Pin):
+	def setup(self, frequency=self.frequency, duty_cycle=self.duty_cycle):
+
+		# Set attributes to parameters
+		self.frequency = frequency
+		self.duty_cycle = duty_cycle
+
+		# Setup the native pin
+		# TEMPLATE: Native PWM pin setup
+		self.native = native_gpio.PWM(self.id, self.frequency)
+
+	def start(self, duty_cycle=self.duty_cycle):
+
+		# Set attributes to parameters
+		self.duty_cycle = duty_cycle
+
+		# TEMPLATE: Start PWM on the native_gpio
+		self.native.start(self.duty_cycle)
+
+		# PWM is running
+		self._running = True
+
+	def stop(self):
+
+		# TEMPLATE: Stop PWM on the native_gpio
+		self.native.stop()
+
+		# PWM is not running
+		self._running = False
+
+	def change_duty_cycle(self, value):
+
+		# Raise error since this should be overridden by wrapper derived class
+		raise errors.SystemNotSet("Please set your system first")
+
+		# Run native ChangeDutyCycle function
+		self.native.ChangeDutyCycle(value)
+
+	def destroy(self):
+		# TEMPLATE: If needed, do native pin deinit
+		self.stop()
+		wrapper.drop_pin(self)
+
+
+
 class GPIO(anygpio.GPIO):
 	# TEMPLATE: Change argument initial_value to the native_gpio.LOW value if needed
 	def setup_pin(self, number, name=None, action=anygpio.do_nothing, is_output=False, initial_value=0):
@@ -92,8 +139,14 @@ class GPIO(anygpio.GPIO):
 		# TEMPLATE: run native GPIO cleanup() function if available
 		native_gpio.cleanup()
 
+
 # wrapper is what will be imported by __init__.py
 wrapper = GPIO()
+
+
+# TEMPLATE: Set GPIO Supports:
+GPIO.supports.pwm = True
+
 
 # TEMPLATE: Set the system to the name of the file
 wrapper.system = Path(__file__).stem
