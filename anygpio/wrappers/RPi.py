@@ -104,9 +104,6 @@ class RPi_PWMPin(RPi_Pin, anygpio.PWMPin):
 
 	def change_duty_cycle(self, value):
 
-		# Raise error since this should be overridden by wrapper derived class
-		raise errors.SystemNotSet("Please set your system first")
-
 		# Run native ChangeDutyCycle function
 		self.native.ChangeDutyCycle(value)
 
