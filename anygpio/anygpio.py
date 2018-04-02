@@ -172,13 +172,13 @@ class PWMPin(Pin):
 		# Setup the native pin
 		# self.native = native_gpio.PWM(self.id, self.frequency)
 
-	def start(self, duty_cycle=self.duty_cycle):
+	def start(self, duty_cycle=None):
 		"""
 		Start PWM at specified duty_cycle
 		"""
 
 		# Set attributes to parameters
-		self.duty_cycle = duty_cycle
+		self.duty_cycle = duty_cycle or self.duty_cycle
 
 		# Raise error since this should be overridden by wrapper derived class
 		raise errors.SystemNotSet("Please set your system first")

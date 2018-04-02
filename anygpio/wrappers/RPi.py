@@ -83,10 +83,10 @@ class PWMPin(Pin):
 		# TEMPLATE: Native PWM pin setup
 		self.native = native_gpio.PWM(self.id, self.frequency)
 
-	def start(self, duty_cycle=self.duty_cycle):
+	def start(self, duty_cycle=None):
 
 		# Set attributes to parameters
-		self.duty_cycle = duty_cycle
+		self.duty_cycle = duty_cycle or self.duty_cycle
 
 		# TEMPLATE: Start PWM on the native_gpio
 		self.native.start(self.duty_cycle)
