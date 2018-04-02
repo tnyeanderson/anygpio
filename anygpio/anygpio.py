@@ -313,10 +313,10 @@ class GPIO:
 		# Create the correct type of Pin
 		if is_output:
 			# Output pin
-			pin = _create_OutputPin_instance(number, name, action, **kwargs)
+			pin = self._create_OutputPin_instance(number, name, action, **kwargs)
 		else:
 			# Input pin
-			pin = _create_InputPin_instance(number, name, action, **kwargs)
+			pin = self._create_InputPin_instance(number, name, action, **kwargs)
 		pin.setup()
 		self._add_pin(pin)
 
