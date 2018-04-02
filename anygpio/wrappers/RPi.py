@@ -47,7 +47,7 @@ class Pin(anygpio.Pin):
 		"""
 		Sets default values and constructs instance of Pin
 		"""
-		super().__init__(self, number, name, action, **kwargs)
+		super().__init__(number, name, action, **kwargs)
 
 		# TEMPLATE: If _id is generated from number, initialize the value here
 		self._id = self.number

@@ -154,7 +154,7 @@ class OutputPin(Pin):
 		"""
 
 		# Run __init__ from parent class
-		super().__init__(self, number, name, action, **kwargs)
+		super().__init__(number, name, action, **kwargs)
 		self.initial_value = kwargs.get("initial_value") or 0
 
 	def output(self, value):
