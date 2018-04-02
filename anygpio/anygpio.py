@@ -312,7 +312,7 @@ class GPIO:
 		if pin and (pin in self.pins):
 			self.pins.remove(pin)
 
-	def PWM(self, number, freqency, duty_cycle=0, name=None):
+	def PWM(self, number, frequency, duty_cycle=0, name=None):
 		"""
 		Use this to initialize a PWM pin
 
