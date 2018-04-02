@@ -21,7 +21,7 @@ native_gpio.setmode(native_gpio.BCM)
 
 # Derived Pin class
 # TEMPLATE: Each method in the Pin class must be changed to use the native_gpio module
-class Pin(anygpio.Pin):
+class RPi_Pin(anygpio.Pin):
 
 	# TEMPLATE: Change to what the native_gpio will accept as pin identifier
 	@property
@@ -73,7 +73,7 @@ class Pin(anygpio.Pin):
 
 
 # Generic PWM Pin class
-class PWMPin(anygpio.PWMPin):
+class RPi_PWMPin(anygpio.PWMPin):
 	def setup(self, frequency=None, duty_cycle=None):
 		# Set attributes to parameters if set
 		self.frequency = frequency or self.frequency
@@ -124,9 +124,12 @@ class GPIO(anygpio.GPIO):
 		# Require the system to be set
 		self._require_system_set()
 		# Create a pin
-		pin = Pin(number, name, action, is_output, initial_value)
+		pin = RPi_Pin(number, name, action, is_output, initial_value)
 		pin.setup()
 		self._add_pin(pin)
+
+	def _create_PWMPin_instance(*args):
+		return RPi_PWMPin(*args)
 
 	# TEMPLATE: Change to LOW or HIGH of native_gpio or delete if not needed
 	def _native_high_or_low(self, value):
