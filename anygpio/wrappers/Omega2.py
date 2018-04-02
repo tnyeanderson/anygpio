@@ -81,7 +81,7 @@ wrapper = GPIO()
 
 
 # Set GPIO Supports:
-GPIO.supports.pwm = False
+wrapper.supports.pwm = False
 
 
 # Set the system to the name of the file

@@ -144,7 +144,7 @@ wrapper = GPIO()
 
 
 # TEMPLATE: Set GPIO Supports:
-GPIO.supports.pwm = True
+wrapper.supports.pwm = True
 
 
 # TEMPLATE: Set the system to the name of the file
