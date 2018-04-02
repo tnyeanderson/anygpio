@@ -266,7 +266,7 @@ class GPIO:
 		if not self.system:
 			raise errors.SystemNotSet("Please set your system first")
 
-	def setup_pin(self, number, name=None, action=do_nothing, header=None is_output=False):
+	def setup_pin(self, number, name=None, action=do_nothing, header=None, is_output=False):
 		"""
 		Use this to initialize a pin
 
