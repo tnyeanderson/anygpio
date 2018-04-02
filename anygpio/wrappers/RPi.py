@@ -43,6 +43,17 @@ class Pin(anygpio.Pin):
 		native			Native GPIO pin object if applicable
 	"""
 
+	# This has to be here to be able so change setter method
+	@property
+	def id(self):
+		"""
+		Getter for self._id
+
+		Pin ID as identified by native_gpio
+		Could be int (01) or could be string ("p9_10")
+		"""
+		return self._id
+
 	@id.setter
 	def id(self, value):
 		"""
