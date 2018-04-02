@@ -129,7 +129,7 @@ class GPIO(anygpio.GPIO):
 		self._add_pin(pin)
 
 	def _create_PWMPin_instance(*args):
-		return RPi_PWMPin(*args)
+		return RPi_PWMPin(*args[1:])
 
 	# TEMPLATE: Change to LOW or HIGH of native_gpio or delete if not needed
 	def _native_high_or_low(self, value):

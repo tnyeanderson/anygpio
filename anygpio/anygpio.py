@@ -328,7 +328,7 @@ class GPIO:
 		_add_pin(pwm_pin)
 
 	def _create_PWMPin_instance(self, *args):
-		return PWMPin(*args)
+		return PWMPin(*args[1:])
 
 	def _find_pin_by_id(self, id):
 		"""
