@@ -140,7 +140,7 @@ class OutputPin(InputPin):
 		Initialize the pin with the native_gpio
 		"""
 		# TEMPLATE: Initialize the pin with the native_gpio
-		native_gpio.setup(self.id, native_gpio.OUT, initial=self._native_high_or_low(self.initial_value))
+		native_gpio.setup(self.id, native_gpio.OUT, initial=wrapper._native_high_or_low(self.initial_value))
 
 
 class PWMPin(OutputPin):
