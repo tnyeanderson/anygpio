@@ -43,6 +43,15 @@ class Pin(anygpio.Pin):
 		native			Native GPIO pin object if applicable
 	"""
 
+	def __init__(self, number, name=None, action=do_nothing, **kwargs):
+		"""
+		Sets default values and constructs instance of Pin
+		"""
+		super().__init__(self, number, name, action, **kwargs)
+
+		# TEMPLATE: If _id is generated from number, initialize the value here
+		self._id = self.number
+
 	# This has to be here to be able so change setter method
 	@property
 	def id(self):
@@ -52,6 +61,7 @@ class Pin(anygpio.Pin):
 		Pin ID as identified by native_gpio
 		Could be int (01) or could be string ("p9_10")
 		"""
+		self._id = self.number
 		return self._id
 
 	@id.setter
