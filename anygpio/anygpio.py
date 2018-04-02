@@ -58,10 +58,10 @@ class Pin:
 		self.name = name
 		self._id = None
 		self.number = number
-		self.header = kwargs["header"] or None
-		self.is_analog = kwargs["is_analog"] or False
+		self.header = header or None
+		self.is_analog = is_analog or False
 		self.action = action
-		self.desired_value = kwargs["desired_value"] or wrapper._native_high_or_low(0)
+		self.desired_value = desired_value or wrapper._native_high_or_low(0)
 		self.supports = Supports()
 		self.native = None
 
@@ -155,7 +155,7 @@ class OutputPin(Pin):
 
 		# Run __init__ from parent class
 		super().__init__(self, number, name, action, **kwargs)
-		self.initial_value = kwargs["initial_value"] or 0
+		self.initial_value = initial_value or 0
 
 	def output(self, value):
 		"""
