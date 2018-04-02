@@ -73,7 +73,7 @@ class RPi_Pin(anygpio.Pin):
 
 
 # Generic PWM Pin class
-class RPi_PWMPin(anygpio.PWMPin):
+class RPi_PWMPin(RPi_Pin, anygpio.PWMPin):
 	def setup(self, frequency=None, duty_cycle=None):
 		# Set attributes to parameters if set
 		self.frequency = frequency or self.frequency

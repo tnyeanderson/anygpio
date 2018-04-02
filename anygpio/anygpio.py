@@ -59,7 +59,6 @@ class Pin:
 		"""
 		self.name = name
 		self._id = None
-		self.id = id
 		self.number = number
 		self.header = header
 		self.is_analog = False
