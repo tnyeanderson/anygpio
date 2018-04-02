@@ -158,13 +158,13 @@ class PWMPin(Pin):
 	duty_cycle = None
 	_running = False
 
-	def setup(self, frequency=self.frequency, duty_cycle=self.duty_cycle):
+	def setup(self, frequency=None, duty_cycle=None):
 		"""
 		Initialize the PWM pin with the native_gpio
 		"""
-		# Set attributes to parameters
-		self.frequency = frequency
-		self.duty_cycle = duty_cycle
+		# Set attributes to parameters if set
+		self.frequency = frequency or self.frequency
+		self.duty_cycle = duty_cycle or self.duty_cycle
 
 		# Raise error since this should be overridden by wrapper derived class
 		raise errors.SystemNotSet("Please set your system first")

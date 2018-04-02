@@ -61,42 +61,6 @@ class Pin(anygpio.Pin):
 		self.native._freeGpio()
 		wrapper.drop_pin(self)
 
-# Derived PWM Pin class
-class PWMPin(Pin):
-	def setup(self, frequency=self.frequency, duty_cycle=self.duty_cycle):
-		"""
-		Initialize the PWM pin with the native_gpio
-		"""
-		# Set attributes to parameters
-		self.frequency = frequency
-		self.duty_cycle = duty_cycle
-
-		# Setup the native pin
-		self.native = native_gpio.PWM(self.id, self.frequency)
-
-	def start(self, duty_cycle=self.duty_cycle):
-
-		# Set attributes to parameters
-		self.duty_cycle = duty_cycle
-
-		# Start PWM on the native_gpio
-		self.native.start(self.duty_cycle)
-
-		# PWM is running
-		self._running = True
-
-	def stop(self):
-
-		# Stop PWM on the native_gpio
-		self.native.stop()
-
-		# PWM is not running
-		self._running = False
-
-	def destroy(self):
-		self.stop()
-		wrapper.drop_pin(self)
-
 # Derived module class
 class GPIO(anygpio.GPIO):
 	# This has to be here to use the derived Pin class for initialization
