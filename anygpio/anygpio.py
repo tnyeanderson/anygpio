@@ -324,7 +324,7 @@ class GPIO:
 		if not self.supports.pwm:
 			raise GPIOFunctionNotSupported("PWM is not supported...")
 
-		pwm_pin = _create_PWMPin_instance(number, name)
+		pwm_pin = self._create_PWMPin_instance(number, name)
 		pwm_pin.setup(frequency, duty_cycle)
 		_add_pin(pwm_pin)
 
