@@ -327,7 +327,7 @@ class GPIO:
 
 		pwm_pin = self._create_PWMPin_instance(number, name)
 		pwm_pin.setup(frequency, duty_cycle)
-		_add_pin(pwm_pin)
+		self._add_pin(pwm_pin)
 
 	def _create_PWMPin_instance(self, *args):
 		return PWMPin(*args[1:])
