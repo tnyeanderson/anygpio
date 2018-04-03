@@ -5,7 +5,7 @@ from .. import anygpio
 from .. import errors
 
 # TEMPLATE: Set to the native GPIO module name
-native_gpio_name = "onionGpio"
+native_gpio_name = "CHIP_IO"
 
 
 # Native GPIO module will be imported and assigned to native_gpio
@@ -47,7 +47,8 @@ class Pin(anygpio.Pin):
 		super().__init__(id, name, action, **kwargs)
 
 		# TEMPLATE: Parse number and header (if applicable) from id by running setter
-		self.id = self._id
+		# self.number = self.id
+
 
 	# This has to be here to be able so change setter method
 	@property
@@ -68,7 +69,7 @@ class Pin(anygpio.Pin):
 		self._id = value
 
 		# TEMPLATE: If id is just the pin number (int), set that here too
-		self.number = value
+		# self.number = value
 
 	def destroy(self):
 		"""
@@ -77,7 +78,7 @@ class Pin(anygpio.Pin):
 		Subsequently calls GPIO.drop_pin()
 		"""
 		# TEMPLATE: Add native pin deconfig code before drop_pin() if needed
-		self.native._freeGpio()
+		wrapper.cleanup(self.id)
 		wrapper.drop_pin(self)
 
 
@@ -91,7 +92,7 @@ class InputPin(Pin, anygpio.InputPin):
 		Initialize the input pin with the native_gpio
 		"""
 		# TEMPLATE: Initialize the input pin with the native_gpio
-		self.native.setInputDirection()
+		native_gpio.GPIO.setup(self.id, native_gpio.GPIO.IN, pull_up_down=native_gpio.GPIO.PUD_UP)
 
 	def value(self):
 		"""
@@ -101,15 +102,14 @@ class InputPin(Pin, anygpio.InputPin):
 		This function should make it return 1 instead
 		"""
 		# TEMPLATE: Change this if native_gpio.input() returns 1 when button is pressed
-		return self.input()
+		return int(self.input())
 
 	def input(self):
 		"""
 		Get input value of pin from the native GPIO library
 		"""
 		# TEMPLATE: Get input value of pin with native_gpio
-		return self.native.getValue()
-
+		return native_gpio.GPIO.input(self.id)
 
 # TEMPLATE: Inherit from InputPin if output pins can be read
 class OutputPin(anygpio.OutputPin, InputPin):
@@ -131,14 +131,14 @@ class OutputPin(anygpio.OutputPin, InputPin):
 		native_gpio.outputToPin(pin.id, GPIO._native_high_or_low(value))
 		"""
 		# TEMPLATE: Output the desired value to the pin
-		return self.native.setValue(value)
+		return native_gpio.GPIO.output(self.id, wrapper._native_high_or_low(value))
 
 	def setup(self):
 		"""
 		Initialize the output pin with the native_gpio
 		"""
 		# TEMPLATE: Initialize the output pin with the native_gpio
-		self.native.setOutputDirection(self.initial_value)
+		native_gpio.GPIO.setup(self.id, native_gpio.GPIO.OUT, initial=wrapper._native_high_or_low(self.initial_value))
 
 
 class PWMPin(anygpio.PWMPin, OutputPin):
@@ -161,12 +161,12 @@ class PWMPin(anygpio.PWMPin, OutputPin):
 		# TEMPLATE: Set default duty_cycle to 0 (change if necessary)
 		self.duty_cycle = duty_cycle or 0
 
-		# Run OutputPin.setup() to set up as output pin first if needed
-		OutputPin.setup(self)
+		# TEMPLATE: Run OutputPin.setup() to set up as output pin first if needed
+		# OutputPin.setup(self)
 
 		# Setup the native pin
 		# TEMPLATE: Native PWM pin setup
-		self.native = native_gpio.PWM(self.id, self.frequency)
+		# self.native = native_gpio.PWM(self.id, self.frequency)
 
 	def start(self, duty_cycle=None):
 		"""
@@ -177,7 +177,7 @@ class PWMPin(anygpio.PWMPin, OutputPin):
 		self.duty_cycle = duty_cycle or self.duty_cycle
 
 		# TEMPLATE: Start PWM on the native_gpio
-		self.native.start(self.duty_cycle)
+		native_gpio.PWM.start(self.id, self.duty_cycle, self.frequency)
 
 		# PWM is running
 		self._running = True
@@ -188,7 +188,7 @@ class PWMPin(anygpio.PWMPin, OutputPin):
 		"""
 
 		# TEMPLATE: Stop PWM on the native_gpio
-		self.native.stop()
+		native_gpio.PWM.stop(self.id)
 
 		# PWM is not running
 		self._running = False
@@ -199,7 +199,7 @@ class PWMPin(anygpio.PWMPin, OutputPin):
 		"""
 
 		# TEMPLATE: Run native ChangeDutyCycle function
-		self.native.ChangeDutyCycle(value)
+		native_gpio.PWM..set_duty_cycle(self.id, value)
 
 	def destroy(self):
 		"""
@@ -267,7 +267,7 @@ class GPIO(anygpio.GPIO):
 
 		Value can be (0 or 1) or (True or False)
 		"""
-		return int(value)
+		return native_gpio.GPIO.HIGH if value else native_gpio.GPIO.LOW
 
 	# This has to be here to use the overridden InputPin class
 	def _get_input_pins(self):
@@ -287,6 +287,7 @@ class GPIO(anygpio.GPIO):
 		self._destroy_all_pins()
 
 		# TEMPLATE: run native GPIO cleanup() function if available
+		native_gpio.GPIO.cleanup()
 
 
 
@@ -296,7 +297,7 @@ wrapper = GPIO()
 
 
 # TEMPLATE: Set GPIO Supports:
-wrapper.supports.pwm = False
+wrapper.supports.pwm = True
 
 
 # Set the system to the name of the file

@@ -8,8 +8,6 @@
 * watch() don't watch outputs option
 
 Wrappers for:
-  - BeagleBone
-  - C.H.I.P.
   - Orange Pi
   - Nano Pi
   - Pine A64

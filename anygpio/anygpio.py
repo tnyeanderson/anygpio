@@ -52,13 +52,13 @@ class Pin:
 		native			Native GPIO pin object if applicable
 	"""
 
-	def __init__(self, number, name=None, action=do_nothing, **kwargs):
+	def __init__(self, id, name=None, action=do_nothing, **kwargs):
 		"""
 		Sets default values and constructs instance of Pin
 		"""
 		self.name = name
-		self._id = kwargs.get("id")
-		self.number = number
+		self._id = id
+		self.number = kwargs.get("number")
 		self.header = kwargs.get("header")
 		self.is_analog = kwargs.get("is_analog") or False
 		self.action = action
@@ -150,13 +150,13 @@ class OutputPin(Pin):
 		initial_value	If the pin is an output, this determines initial state
 							(0 or 1)
 	"""
-	def __init__(self, number, name=None, action=do_nothing, **kwargs):
+	def __init__(self, id, name=None, action=do_nothing, **kwargs):
 		"""
 		Sets default values and constructs instance of an InputPin
 		"""
 
 		# Run __init__ from parent class
-		super().__init__(number, name, action, **kwargs)
+		super().__init__(id, name, action, **kwargs)
 		self.initial_value = kwargs.get("initial_value") or 0
 
 	def output(self, value):
@@ -461,6 +461,14 @@ class GPIO:
 		self._require_system_set()
 		self._destroy_all_pins()
 
+	def _get_input_pins(self):
+		"""
+		Get all input pins from self.pins
+
+		Must be included in wrapper GPIO class to use overridden InputPin Class
+		"""
+		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, PWMPin)]
+
 	def watch(self, interval=0.15):
 		"""
 		Watch all pins for their desired_value, and execute pin.action()
@@ -475,6 +483,9 @@ class GPIO:
 		# Set self._watch to handle stop_watching() without watch() first
 		self._watching = True
 
+		# Create array of only input pins
+		inputs = self._get_input_pins()
+
 		# Loop through each pin checking its value()
 		try:
 			# Ensure that breaking out is possible using _watching
@@ -483,7 +494,7 @@ class GPIO:
 				time.sleep(interval)
 
 				# Check each pin
-				for pin in self.pins:
+				for pin in inputs:
 					if pin.test():
 						pin.action()
 		except KeyboardInterrupt:
