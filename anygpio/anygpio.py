@@ -195,7 +195,7 @@ class PWMPin(OutputPin):
 		"""
 		# Set attributes to parameters if set
 		self.frequency = frequency or self.frequency
-		self.duty_cycle = duty_cycle or self.duty_cycle
+		self.duty_cycle = duty_cycle or 0
 
 		# Run OutputPin.setup() to set up as output pin first if needed
 		super().setup()
