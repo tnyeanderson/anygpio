@@ -143,7 +143,7 @@ class OutputPin(anygpio.OutputPin, InputPin):
 		native_gpio.setup(self.id, native_gpio.OUT, initial=wrapper._native_high_or_low(self.initial_value))
 
 
-class PWMPin(OutputPin):
+class PWMPin(anygpio.PWMPin, OutputPin):
 	"""
 	Derived class for storing GPIO PWM pin configurations and related methods
 
