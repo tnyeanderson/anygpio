@@ -5,6 +5,7 @@
 * Packagify wrappers?
 * Pull up and pull down resistor setting
 * Improve README
+* watch() don't watch outputs option
 
 Wrappers for:
   - BeagleBone

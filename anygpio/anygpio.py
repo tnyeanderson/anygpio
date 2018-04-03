@@ -22,8 +22,8 @@ class Supports:
 
 	In the future, this will contain pwm, pull_up_down, etc
 	"""
-	def __init__(self):
-		pass
+	pwm = False
+
 
 # Generic Pin class
 class Pin:
@@ -34,7 +34,7 @@ class Pin:
 		name			User defined pin name
 		_id				self.id private variable
 		id				Pin ID as identified by native_gpio
-							Could be int (01) or could be string ("p9_10")
+							Could be int (10) or could be string ("p9_10")
 		number			Pin number as integer
 							Used as id on systems such as RPi and Omega2
 							Used in combination with header info for BeagleBone
@@ -42,8 +42,6 @@ class Pin:
 							Used in systems like BeagleBone
 								(id="p" + self.header + "_" + pin.number)
 		is_analog		Is analog pin. False if digital, True if analog
-		is_output		Is output pin. False if input, True if output
-							Pins are set to inputs by default.
 		action			Stores the function that should be called when:
 							(value() == desired_value) && GPIO._watching
 		desired_value	The desired value of a pin. This should be 1
@@ -54,31 +52,20 @@ class Pin:
 		native			Native GPIO pin object if applicable
 	"""
 
-	def __init__(self, number, name=None, action=do_nothing, header=None, is_output=False, initial_value=None, id=None):
+	def __init__(self, number, name=None, action=do_nothing, **kwargs):
 		"""
 		Sets default values and constructs instance of Pin
 		"""
 		self.name = name
-		self._id = None
-		self.id = id
+		self._id = kwargs.get("id")
 		self.number = number
-		self.header = header
-		self.is_analog = False
-		self.is_output = is_output
+		self.header = kwargs.get("header")
+		self.is_analog = kwargs.get("is_analog") or False
 		self.action = action
-		self.desired_value = 1
-		self.initial_value = initial_value
+		self.desired_value = kwargs.get("desired_value") or 1
 		self.supports = Supports()
 		self.native = None
 
-	def value(self):
-		"""
-		Use this to return a curated, semantic value from the pins input
-
-		For instance, on RPi, when a button is pressed, self.input() returns 0
-		This function should make it return 1 instead
-		"""
-		return self.input()
 
 	@property
 	def id(self):
@@ -97,6 +84,44 @@ class Pin:
 		"""
 		self._id = value
 
+	def setup(self):
+		"""
+		Initialize the pin with the native_gpio
+		"""
+		raise errors.SystemNotSet("Please set your system first")
+
+	def destroy(self):
+		"""
+		Remove pin configuration through native pin object then drop pin
+
+		Subsequently calls GPIO.drop_pin()
+		"""
+		raise errors.SystemNotSet("Please set your system first")
+		# wrapper.drop_pin(self)
+
+
+# Generic InputPin class
+class InputPin(Pin):
+	"""
+	Derived class for storing GPIO input pin configurations and related methods
+	"""
+
+	def setup(self):
+		"""
+		Initialize the input pin with the native_gpio
+		"""
+		raise errors.SystemNotSet("Please set your system first")
+		# native_gpio.setup(self.id, native_gpio.IN)
+
+	def value(self):
+		"""
+		Use this to return a curated, semantic value from the pins input
+
+		For instance, on RPi, when a button is pressed, self.input() returns 0
+		This function should make it return 1 instead
+		"""
+		return self.input()
+
 	def input(self):
 		"""
 		Get input value of pin from the native GPIO library
@@ -107,6 +132,33 @@ class Pin:
 			raise errors.SystemNotSet("Please set your system first")
 			# return native_gpio.getPinInput(pin.id)
 
+	def test(self):
+		"""
+		Returns whether value() is equal to desired_value
+
+		Used for GPIO.watch()
+		"""
+		return (self.value() == self.desired_value)
+
+
+# Generic OutputPin class
+class OutputPin(Pin):
+	"""
+	Derived class for storing GPIO input pin configurations and related methods
+
+	Attributes:
+		initial_value	If the pin is an output, this determines initial state
+							(0 or 1)
+	"""
+	def __init__(self, number, name=None, action=do_nothing, **kwargs):
+		"""
+		Sets default values and constructs instance of an InputPin
+		"""
+
+		# Run __init__ from parent class
+		super().__init__(number, name, action, **kwargs)
+		self.initial_value = kwargs.get("initial_value") or 0
+
 	def output(self, value):
 		"""
 		Output the desired value to the pin
@@ -114,25 +166,99 @@ class Pin:
 		value should be (0 or 1).
 		native_gpio.outputToPin(pin.id, GPIO._native_high_or_low(value))
 		"""
-		if (self.is_output):
-			raise errors.SystemNotSet("Please set your system first")
-		else:
-			raise errors.WrongPinType("Pin is set to input")
+		raise errors.SystemNotSet("Please set your system first")
+		# raise errors.WrongPinType("Pin is set to input")
 
 	def setup(self):
 		"""
-		Initialize the pin with the native_gpio
+		Initialize the output pin with the native_gpio
 		"""
 		raise errors.SystemNotSet("Please set your system first")
-		# native_gpio.setup(self.id, native_gpio.OUT if self.is_output else native_gpio.IN)
+		# native_gpio.setup(self.id, native_gpio.OUT, initial=self._native_high_or_low(self.initial_value))
+
+# Generic PWM Pin class
+class PWMPin(OutputPin):
+	"""
+	Derived class for storing GPIO PWM pin configurations and related methods
+
+	Attributes:
+		frequency		Array of configured pins
+		duty_cycle		Stores Support() instance for system-wide support configurations
+		_running		Is pwm running on this pin?
+	"""
+
+	frequency = None
+	duty_cycle = None
+	_running = False
+
+	def setup(self, frequency=None, duty_cycle=None):
+		"""
+		Initialize the PWM pin with the native_gpio
+		"""
+		# Set attributes to parameters if set
+		self.frequency = frequency or self.frequency
+		self.duty_cycle = duty_cycle or 0
+
+		# Raise error since this should be overridden by wrapper derived class
+		raise errors.SystemNotSet("Please set your system first")
+
+		# Run OutputPin.setup() to set up as output pin first if needed
+		OutputPin.setup(self)
+
+		# Setup the native pin
+		# self.native = native_gpio.PWM(self.id, self.frequency)
+
+	def start(self, duty_cycle=None):
+		"""
+		Start PWM at specified duty_cycle
+		"""
+
+		# Set attributes to parameters
+		self.duty_cycle = duty_cycle or self.duty_cycle
+
+		# Raise error since this should be overridden by wrapper derived class
+		raise errors.SystemNotSet("Please set your system first")
+
+
+		# Start PWM on the native_gpio
+		# self.native.start(self.duty_cycle)
+
+		# PWM is running
+		self._running = True
+
+	def stop(self):
+		"""
+		Stop PWM
+		"""
+
+		# Raise error since this should be overridden by wrapper derived class
+		raise errors.SystemNotSet("Please set your system first")
+
+		# Stop PWM on the native_gpio
+		#self.native.stop()
+
+		# PWM is not running
+		self._running = False
+
+	def change_duty_cycle(self, value):
+		"""
+		Update the PWM duty cycle
+		"""
+
+		# Raise error since this should be overridden by wrapper derived class
+		raise errors.SystemNotSet("Please set your system first")
+
+		# Run native ChangeDutyCycle function
+		# self.native.ChangeDutyCycle(value)
 
 	def destroy(self):
 		"""
-		Remove pin configuration from GPIO.pins and native_gpio
+		Remove PWM pin configuration through native pin object then drop pin
 
-		Calls GPIO.drop_pin()
+		Stops PWM on pin, deconfigs, then calls GPIO.drop_pin()
 		"""
 		raise errors.SystemNotSet("Please set your system first")
+		# self.stop()
 		# wrapper.drop_pin(self)
 
 
@@ -177,16 +303,47 @@ class GPIO:
 		if not self.system:
 			raise errors.SystemNotSet("Please set your system first")
 
-	def setup_pin(self, name, number, action=do_nothing, is_output=False):
+	def setup_pin(self, number, name=None, action=do_nothing, is_output=False, **kwargs):
 		"""
 		Use this to initialize a pin
 
 		Pins should call their own setup()
 		"""
 		self._require_system_set()
-		pin = Pin(name, number, action, is_output)
+
+		# Create the correct type of Pin
+		if is_output:
+			# Output pin
+			pin = self._create_OutputPin_instance(number, name, action, **kwargs)
+		else:
+			# Input pin
+			pin = self._create_InputPin_instance(number, name, action, **kwargs)
 		pin.setup()
 		self._add_pin(pin)
+
+	def _create_Pin_instance(*args):
+		"""
+		Create an instance of Pin
+		"""
+		return Pin(*args[1:])
+
+	def _create_InputPin_instance(*args):
+		"""
+		Create an instance of InputPin
+		"""
+		return InputPin(*args[1:])
+
+	def _create_OutputPin_instance(*args):
+		"""
+		Create an instance of OutputPin
+		"""
+		return OutputPin(*args[1:])
+
+	def _create_PWMPin_instance(*args):
+		"""
+		Create an instance of PWMPin
+		"""
+		return PWMPin(*args[1:])
 
 	def _add_pin(self, pin):
 		"""
@@ -221,6 +378,22 @@ class GPIO:
 		"""
 		if pin and (pin in self.pins):
 			self.pins.remove(pin)
+
+	def PWM(self, number, frequency, duty_cycle=0, name=None):
+		"""
+		Use this to initialize a PWM pin
+
+		Use explicit argument for name
+		PWM pins should call their own setup()
+		"""
+		self._require_system_set()
+
+		if not self.supports.pwm:
+			raise GPIOFunctionNotSupported("PWM is not supported on system")
+
+		pwm_pin = self._create_PWMPin_instance(number, name)
+		pwm_pin.setup(frequency, duty_cycle)
+		self._add_pin(pwm_pin)
 
 	def _find_pin_by_id(self, id):
 		"""
@@ -270,6 +443,15 @@ class GPIO:
 			# If query is pin.name
 			return self._find_pin_by_name(query)
 
+	def setup(self):
+		"""
+		Native GPIO initialization
+
+		Can be performed after GPIO.cleanup()
+		Set numbering mode, etc
+		"""
+		self._require_system_set()
+
 	def cleanup(self):
 		"""
 		Run the native GPIO cleanup() function if available
@@ -302,7 +484,7 @@ class GPIO:
 
 				# Check each pin
 				for pin in self.pins:
-					if pin.value() == pin.desired_value:
+					if pin.test():
 						pin.action()
 		except KeyboardInterrupt:
 			# This is currently not being used, see signal.signal
