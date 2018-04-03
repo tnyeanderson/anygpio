@@ -52,13 +52,13 @@ class Pin:
 		native			Native GPIO pin object if applicable
 	"""
 
-	def __init__(self, number, name=None, action=do_nothing, **kwargs):
+	def __init__(self, id, name=None, action=do_nothing, **kwargs):
 		"""
 		Sets default values and constructs instance of Pin
 		"""
 		self.name = name
-		self._id = kwargs.get("id")
-		self.number = number
+		self._id = id
+		self.number = kwargs.get("number")
 		self.header = kwargs.get("header")
 		self.is_analog = kwargs.get("is_analog") or False
 		self.action = action
@@ -150,13 +150,13 @@ class OutputPin(Pin):
 		initial_value	If the pin is an output, this determines initial state
 							(0 or 1)
 	"""
-	def __init__(self, number, name=None, action=do_nothing, **kwargs):
+	def __init__(self, id, name=None, action=do_nothing, **kwargs):
 		"""
 		Sets default values and constructs instance of an InputPin
 		"""
 
 		# Run __init__ from parent class
-		super().__init__(number, name, action, **kwargs)
+		super().__init__(id, name, action, **kwargs)
 		self.initial_value = kwargs.get("initial_value") or 0
 
 	def output(self, value):
