@@ -15,9 +15,6 @@ try:
 except:
 	raise errors.NoNativeGPIO("Could not import " + native_gpio_name)
 
-# TEMPLATE: to the correct native setmode() function if required, or delete line
-# Always use BCM Mode
-native_gpio.setmode(native_gpio.BCM)
 
 class Pin(anygpio.Pin):
 	"""
@@ -216,6 +213,16 @@ class PWMPin(anygpio.PWMPin, OutputPin):
 
 class GPIO(anygpio.GPIO):
 
+	def setup(self):
+		"""
+		Native GPIO initialization
+
+		Can be performed after GPIO.cleanup()
+		Set numbering mode, etc
+		"""
+		# TEMPLATE: Add GPIO initialization procedures here
+		self.native.setmode(self.native.BCM)
+
 	# This has to be here to use the overridden Pin class
 	def _create_Pin_instance(*args):
 		"""
@@ -288,3 +295,6 @@ wrapper.system = Path(__file__).stem
 
 # Link the native GPIO library so it can be accessed directly
 wrapper.native = native_gpio
+
+# Do native GPIO initialization
+wrapper.setup()

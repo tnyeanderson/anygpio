@@ -24,6 +24,7 @@ class Supports:
 	"""
 	pwm = False
 
+
 # Generic Pin class
 class Pin:
 	"""
@@ -97,6 +98,7 @@ class Pin:
 		"""
 		raise errors.SystemNotSet("Please set your system first")
 		# wrapper.drop_pin(self)
+
 
 # Generic InputPin class
 class InputPin(Pin):
@@ -258,7 +260,6 @@ class PWMPin(OutputPin):
 		raise errors.SystemNotSet("Please set your system first")
 		# self.stop()
 		# wrapper.drop_pin(self)
-
 
 
 # Generic module class
@@ -441,6 +442,15 @@ class GPIO:
 		else:
 			# If query is pin.name
 			return self._find_pin_by_name(query)
+
+	def setup(self):
+		"""
+		Native GPIO initialization
+
+		Can be performed after GPIO.cleanup()
+		Set numbering mode, etc
+		"""
+		self._require_system_set()
 
 	def cleanup(self):
 		"""
