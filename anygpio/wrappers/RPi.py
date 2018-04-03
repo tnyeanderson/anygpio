@@ -244,7 +244,7 @@ class GPIO(anygpio.GPIO):
 		return OutputPin(*args[1:])
 
 	# This has to be here to use the overridden PWMPin class
-	def _create_PWMPin_instance(self, *args):
+	def _create_PWMPin_instance(*args):
 		"""
 		Create an instance of PWMPin
 

@@ -338,7 +338,7 @@ class GPIO:
 		"""
 		return OutputPin(*args[1:])
 
-	def _create_PWMPin_instance(self, *args):
+	def _create_PWMPin_instance(*args):
 		"""
 		Create an instance of PWMPin
 		"""
