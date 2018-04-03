@@ -56,7 +56,7 @@ class Pin:
 		Sets default values and constructs instance of Pin
 		"""
 		self.name = name
-		self._id = None
+		self._id = kwargs.get("id")
 		self.number = number
 		self.header = kwargs.get("header")
 		self.is_analog = kwargs.get("is_analog") or False
@@ -386,8 +386,6 @@ class GPIO:
 		PWM pins should call their own setup()
 		"""
 		self._require_system_set()
-
-		self.setup_pin(number, name, is_output=True)
 
 		if not self.supports.pwm:
 			raise GPIOFunctionNotSupported("PWM is not supported...")
