@@ -201,7 +201,7 @@ class PWMPin(OutputPin):
 		raise errors.SystemNotSet("Please set your system first")
 
 		# Run OutputPin.setup() to set up as output pin first if needed
-		super().setup()
+		OutputPin.setup(self)
 
 		# Setup the native pin
 		# self.native = native_gpio.PWM(self.id, self.frequency)

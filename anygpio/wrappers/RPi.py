@@ -164,7 +164,7 @@ class PWMPin(anygpio.PWMPin, OutputPin):
 		self.duty_cycle = duty_cycle or 0
 
 		# Run OutputPin.setup() to set up as output pin first if needed
-		super().setup()
+		OutputPin.setup(self)
 
 		# Setup the native pin
 		# TEMPLATE: Native PWM pin setup
