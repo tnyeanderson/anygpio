@@ -475,6 +475,9 @@ class GPIO:
 		# Set self._watch to handle stop_watching() without watch() first
 		self._watching = True
 
+		# Generate array of only input pins
+		inputs = (pin for pin in self.pins if isinstance(pin, InputPin))
+
 		# Loop through each pin checking its value()
 		try:
 			# Ensure that breaking out is possible using _watching
@@ -483,7 +486,7 @@ class GPIO:
 				time.sleep(interval)
 
 				# Check each pin
-				for pin in self.pins:
+				for pin in inputs:
 					if pin.test():
 						pin.action()
 		except KeyboardInterrupt:
