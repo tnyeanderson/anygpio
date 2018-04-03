@@ -461,6 +461,14 @@ class GPIO:
 		self._require_system_set()
 		self._destroy_all_pins()
 
+	def _get_input_pins(self):
+		"""
+		Get all input pins from self.pins
+
+		Must be included in wrapper GPIO class to use overridden InputPin Class
+		"""
+		return [pin for pin in self.pins if isinstance(pin, InputPin)]
+
 	def watch(self, interval=0.15):
 		"""
 		Watch all pins for their desired_value, and execute pin.action()
@@ -476,7 +484,7 @@ class GPIO:
 		self._watching = True
 
 		# Create array of only input pins
-		inputs = [pin for pin in self.pins if isinstance(pin, InputPin)]
+		inputs = self._get_input_pins()
 
 		# Loop through each pin checking its value()
 		try:

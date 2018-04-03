@@ -269,6 +269,15 @@ class GPIO(anygpio.GPIO):
 		"""
 		return native_gpio.GPIO.HIGH if value else native_gpio.GPIO.LOW
 
+	# This has to be here to use the overridden InputPin class
+	def _get_input_pins(self):
+		"""
+		Get all input pins from self.pins
+
+		Must be included in wrapper GPIO class to use overridden InputPin Class
+		"""
+		return [pin for pin in self.pins if isinstance(pin, InputPin)]
+
 	def cleanup(self):
 		"""
 		Run the native GPIO cleanup() function if available
