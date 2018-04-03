@@ -110,6 +110,7 @@ class InputPin(Pin):
 		return native_gpio.input(self.id)
 
 
+# TEMPLATE: Inherit from InputPin if output pins can be read
 class OutputPin(anygpio.OutputPin, InputPin):
 	"""
 	Derived class for storing GPIO input pin configurations and related methods

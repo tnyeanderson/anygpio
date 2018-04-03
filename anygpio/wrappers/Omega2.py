@@ -111,6 +111,7 @@ class InputPin(Pin):
 		return self.native.getValue()
 
 
+# TEMPLATE: Inherit from InputPin if output pins can be read
 class OutputPin(anygpio.OutputPin, InputPin):
 	"""
 	Derived class for storing GPIO input pin configurations and related methods
