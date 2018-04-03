@@ -467,7 +467,7 @@ class GPIO:
 
 		Must be included in wrapper GPIO class to use overridden InputPin Class
 		"""
-		return [pin for pin in self.pins if isinstance(pin, InputPin)]
+		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, PWMPin)]
 
 	def watch(self, interval=0.15):
 		"""
