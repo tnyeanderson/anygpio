@@ -88,9 +88,9 @@ class InputPin(Pin):
 
 	def setup(self):
 		"""
-		Initialize the pin with the native_gpio
+		Initialize the input pin with the native_gpio
 		"""
-		# TEMPLATE: Initialize the pin with the native_gpio
+		# TEMPLATE: Initialize the input pin with the native_gpio
 		native_gpio.setup(self.id, native_gpio.IN, pull_up_down=native_gpio.PUD_UP)
 
 	def value(self):
@@ -134,9 +134,9 @@ class OutputPin(anygpio.OutputPin, InputPin):
 
 	def setup(self):
 		"""
-		Initialize the pin with the native_gpio
+		Initialize the output pin with the native_gpio
 		"""
-		# TEMPLATE: Initialize the pin with the native_gpio
+		# TEMPLATE: Initialize the output pin with the native_gpio
 		native_gpio.setup(self.id, native_gpio.OUT, initial=wrapper._native_high_or_low(self.initial_value))
 
 
@@ -259,7 +259,7 @@ class GPIO(anygpio.GPIO):
 		"""
 		return PWMPin(*args[1:])
 
-	# TEMPLATE: Change to LOW or HIGH of native_gpio or delete if not needed
+	# TEMPLATE: Change to LOW or HIGH of native_gpio
 	def _native_high_or_low(self, value):
 		"""
 		Returns LOW or HIGH value from native_gpio
@@ -290,7 +290,7 @@ wrapper = GPIO()
 wrapper.supports.pwm = True
 
 
-# TEMPLATE: Set the system to the name of the file
+# Set the system to the name of the file
 wrapper.system = Path(__file__).stem
 
 # Link the native GPIO library so it can be accessed directly

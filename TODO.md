@@ -6,7 +6,6 @@
 * Pull up and pull down resistor setting
 * Improve README
 * watch() don't watch outputs option
-* InputPin and OutputPin classes
 
 Wrappers for:
   - BeagleBone
