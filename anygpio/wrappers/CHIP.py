@@ -82,7 +82,7 @@ class Pin(anygpio.Pin):
 		wrapper.drop_pin(self)
 
 
-class InputPin(Pin):
+class InputPin(Pin, anygpio.InputPin):
 	"""
 	Derived class for storing GPIO input pin configurations and related methods
 	"""
