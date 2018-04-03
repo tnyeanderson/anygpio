@@ -475,8 +475,8 @@ class GPIO:
 		# Set self._watch to handle stop_watching() without watch() first
 		self._watching = True
 
-		# Generate array of only input pins
-		inputs = (pin for pin in self.pins if isinstance(pin, InputPin))
+		# Create array of only input pins
+		inputs = [pin for pin in self.pins if isinstance(pin, InputPin)]
 
 		# Loop through each pin checking its value()
 		try:
