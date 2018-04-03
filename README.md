@@ -3,7 +3,7 @@
 *This project is a work in progress, changes may be made at any time that may not be backwards compatible. Submit a pull request to help make this not a WIP!*
 
 This goal of this project is to create a "universal"
-language for simple GPIO functions on Single-Board Computers (SBCs). Currently, this involves simple pin initialization, reading input (HIGH or LOW), and outputting to the pin (HIGH or LOW). More functionality may be added later (such as PWM).
+language for simple GPIO functions on Single-Board Computers (SBCs). Currently, this involves simple pin initialization, reading input (HIGH or LOW), and outputting to the pin (HIGH or LOW). PWM is also supported when available. More functionality may be added later (such as event-driven GPIO!).
 
 This project is designed to be modular and accessible. It provides access to any native GPIO objects so you will never lose functionality using this library as long as your SBC is supported (check the `anygpio/wrappers` folder for your SBC).
 
