@@ -40,14 +40,14 @@ class Pin(anygpio.Pin):
 		native			Native GPIO pin object if applicable
 	"""
 
-	def __init__(self, number, name=None, action=anygpio.do_nothing, **kwargs):
+	def __init__(self, id, name=None, action=anygpio.do_nothing, **kwargs):
 		"""
 		Sets default values and constructs instance of Pin
 		"""
-		super().__init__(number, name, action, **kwargs)
+		super().__init__(id, name, action, **kwargs)
 
-		# TEMPLATE: If _id is generated from number, initialize the value here
-		self._id = self.number
+		# TEMPLATE: Parse number and header (if applicable) from id by running setter
+		self.id = self._id
 
 	# This has to be here to be able so change setter method
 	@property
@@ -58,7 +58,6 @@ class Pin(anygpio.Pin):
 		Pin ID as identified by native_gpio
 		Could be int (01) or could be string ("p9_10")
 		"""
-		self._id = self.number
 		return self._id
 
 	@id.setter
@@ -81,7 +80,7 @@ class Pin(anygpio.Pin):
 		wrapper.drop_pin(self)
 
 
-class InputPin(Pin):
+class InputPin(Pin, anygpio.InputPin):
 	"""
 	Derived class for storing GPIO input pin configurations and related methods
 	"""
@@ -111,6 +110,7 @@ class InputPin(Pin):
 		return native_gpio.input(self.id)
 
 
+# TEMPLATE: Inherit from InputPin if output pins can be read
 class OutputPin(anygpio.OutputPin, InputPin):
 	"""
 	Derived class for storing GPIO input pin configurations and related methods
@@ -267,6 +267,15 @@ class GPIO(anygpio.GPIO):
 		Value can be (0 or 1) or (True or False)
 		"""
 		return native_gpio.HIGH if value else native_gpio.LOW
+
+	# This has to be here to use the overridden InputPin class
+	def _get_input_pins(self):
+		"""
+		Get all input pins from self.pins
+
+		Must be included in wrapper GPIO class to use overridden InputPin Class
+		"""
+		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, PWMPin)]
 
 	def cleanup(self):
 		"""
