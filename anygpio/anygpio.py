@@ -197,11 +197,11 @@ class PWMPin(OutputPin):
 		self.frequency = frequency or self.frequency
 		self.duty_cycle = duty_cycle or 0
 
-		# Run OutputPin.setup() to set up as output pin first if needed
-		super().setup()
-
 		# Raise error since this should be overridden by wrapper derived class
 		raise errors.SystemNotSet("Please set your system first")
+
+		# Run OutputPin.setup() to set up as output pin first if needed
+		super().setup()
 
 		# Setup the native pin
 		# self.native = native_gpio.PWM(self.id, self.frequency)
