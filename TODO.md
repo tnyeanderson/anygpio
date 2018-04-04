@@ -5,7 +5,8 @@
 * Packagify wrappers?
 * Pull up and pull down resistor setting
 * Improve README
-* watch() don't watch outputs option
+* PWM.change_frequency()
+* Event-driven IO
 
 Wrappers for:
   - Orange Pi

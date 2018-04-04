@@ -461,15 +461,27 @@ class GPIO:
 		self._require_system_set()
 		self._destroy_all_pins()
 
-	def _get_input_pins(self):
+	def _get_all_input_pins(self):
 		"""
 		Get all input pins from self.pins
 
 		Must be included in wrapper GPIO class to use overridden InputPin Class
+		Since OutputPins can also be read in some systems, they can inherit from InputPin
+		This returns all InputPins (including OutputPins which are derived from InputPin)
 		"""
 		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, PWMPin)]
 
-	def watch(self, interval=0.15):
+	def _get_input_pins_only(self):
+		"""
+		Get all input pins from self.pins
+
+		Must be included in wrapper GPIO class to use overridden InputPin Class
+		Since OutputPins can also be read in some systems, they can inherit from InputPin
+		This returns only InputPins
+		"""
+		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, OutputPin)]
+
+	def watch(self, interval=0.15, watch_outputs=False):
 		"""
 		Watch all pins for their desired_value, and execute pin.action()
 
@@ -483,8 +495,12 @@ class GPIO:
 		# Set self._watch to handle stop_watching() without watch() first
 		self._watching = True
 
-		# Create array of only input pins
-		inputs = self._get_input_pins()
+		if watch_outputs:
+			# Create array of all InputPins (including derived OutputPins)
+			inputs = self._get_all_input_pins()
+		else:
+			# Create array of only InputPins
+			inputs = self._get_input_pins_only()
 
 		# Loop through each pin checking its value()
 		try:
