@@ -199,13 +199,21 @@ class PWMPin(anygpio.PWMPin, OutputPin):
 		# PWM is not running
 		self._running = False
 
+	def change_frequency(self, value):
+		"""
+		Update the PWM frequency
+		"""
+
+		# TEMPLATE: Run native ChangeFrequency function
+		native_gpio.PWM.set_frequency(self.id, value)
+
 	def change_duty_cycle(self, value):
 		"""
 		Update the PWM duty cycle
 		"""
 
 		# TEMPLATE: Run native ChangeDutyCycle function
-		native_gpio.PWM..set_duty_cycle(self.id, value)
+		native_gpio.PWM.set_duty_cycle(self.id, value)
 
 	def destroy(self):
 		"""

@@ -240,6 +240,17 @@ class PWMPin(OutputPin):
 		# PWM is not running
 		self._running = False
 
+	def change_frequency(self, value):
+		"""
+		Update the PWM frequency
+		"""
+
+		# Raise error since this should be overridden by wrapper derived class
+		raise errors.SystemNotSet("Please set your system first")
+
+		# Run native ChangeDutyCycle function
+		# self.native.ChangeFrequency(value)
+
 	def change_duty_cycle(self, value):
 		"""
 		Update the PWM duty cycle
