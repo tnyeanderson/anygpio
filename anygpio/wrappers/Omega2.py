@@ -97,11 +97,10 @@ class InputPin(Pin, anygpio.InputPin):
 		"""
 		Use this to return a curated, semantic value from the pins input
 
-		For instance, on RPi, when a button is pressed, self.input() returns 0
-		This function should make it return 1 instead
+		This should return (0 or 1) for LOW and HIGH respectively
 		"""
 		# TEMPLATE: Change this if native_gpio.input() returns 1 when button is pressed
-		return self.input()
+		return int(self.input())
 
 	def input(self):
 		"""

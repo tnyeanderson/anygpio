@@ -20,7 +20,7 @@ class Supports:
 	"""
 	Base class for storing features supported on a given system
 
-	In the future, this will contain pwm, pull_up_down, etc
+	In the future, this will contain pull_up_down, etc
 	"""
 	pwm = False
 
@@ -117,10 +117,9 @@ class InputPin(Pin):
 		"""
 		Use this to return a curated, semantic value from the pins input
 
-		For instance, on RPi, when a button is pressed, self.input() returns 0
-		This function should make it return 1 instead
+		This should return (0 or 1) for LOW and HIGH respectively
 		"""
-		return self.input()
+		return int(self.input())
 
 	def input(self):
 		"""

@@ -5,7 +5,6 @@
 * Packagify wrappers?
 * Pull up and pull down resistor setting
 * Improve README
-* PWM.change_frequency()
 * Event-driven IO
 
 Wrappers for:
