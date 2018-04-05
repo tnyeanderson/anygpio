@@ -139,6 +139,33 @@ class InputPin(Pin):
 		"""
 		return (self.value() == self.desired_value)
 
+	def event(self, action=None, desired_value=None, both=False):
+		"""
+		Registers an event handler for interrupt-driven GPIO if supported
+
+		Uses self.action as default callback
+		Uses self.desired_value to determine GPIO.RISING or GPIO.FALLING
+		"""
+
+		# Don't set self.action, just use it as default
+		action = action or self.action
+
+		# Set self.desired_value if desired_value is set
+		self.desired_value = desired_value or self.desired_value
+
+		# Raise error if system set
+		raise errors.SystemNotSet("Please set your system first")
+
+		if both:
+			rising_or_falling = native_gpio.BOTH
+		else
+			# Determine GPIO.RISING or GPIO.FALLING
+			rising_or_falling = wrapper._get_rising_falling(self.desired_value)
+
+		# Register the event callback
+		native_gpio.add_event_detect(self.id, rising_or_falling, self.action)
+
+
 
 # Generic OutputPin class
 class OutputPin(Pin):
@@ -470,6 +497,22 @@ class GPIO:
 		"""
 		self._require_system_set()
 		self._destroy_all_pins()
+
+	@property
+	def both(self):
+		"""
+		Returns GPIO.BOTH
+		"""
+		return native_gpio.BOTH
+
+	def _get_rising_falling(self, value):
+		"""
+		Returns GPIO.RISING (1) or GPIO.FALLING (0)
+		"""
+
+		self._require_system_set()
+
+		return (native_gpio.RISING if value else native_gpio.FALLING)
 
 	def _get_all_input_pins(self):
 		"""
