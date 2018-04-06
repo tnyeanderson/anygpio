@@ -200,7 +200,7 @@ class InputPin(Pin):
 		"""
 		self._require_system_set()
 
-		wrapper._add_event(*args[1:])
+		return wrapper._add_event(*args[1:])
 
 	def _native_rising_falling(*args):
 		"""
@@ -210,7 +210,7 @@ class InputPin(Pin):
 		"""
 		self._require_system_set()
 
-		wrapper._native_rising_falling(*args[1:])
+		return wrapper._native_rising_falling(*args[1:])
 
 
 

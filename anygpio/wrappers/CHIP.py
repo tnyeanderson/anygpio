@@ -118,7 +118,7 @@ class InputPin(Pin, anygpio.InputPin):
 		This has to be here to have access to the wrapper variable
 		"""
 
-		wrapper._add_event(*args[1:])
+		return wrapper._add_event(*args[1:])
 
 	def _native_rising_falling(*args):
 		"""
@@ -127,7 +127,7 @@ class InputPin(Pin, anygpio.InputPin):
 		This has to be here to have access to the wrapper variable
 		"""
 
-		wrapper._native_rising_falling(*args[1:])
+		return wrapper._native_rising_falling(*args[1:])
 
 
 # TEMPLATE: Inherit from InputPin if output pins can be read
