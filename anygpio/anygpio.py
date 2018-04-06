@@ -180,8 +180,6 @@ class InputPin(Pin):
 		# Set self.desired_value if desired_value is set
 		self.desired_value = desired_value or self.desired_value
 
-		self._require_system_set()
-
 		if both:
 			rising_or_falling = native_gpio.BOTH
 		else:
@@ -202,7 +200,7 @@ class InputPin(Pin):
 		"""
 		self._require_system_set()
 
-		wrapper._add_event(*args)
+		wrapper._add_event(*args[1:])
 
 	def _native_rising_falling(*args):
 		"""
@@ -212,7 +210,7 @@ class InputPin(Pin):
 		"""
 		self._require_system_set()
 
-		wrapper._native_rising_falling(*args)
+		wrapper._native_rising_falling(*args[1:])
 
 
 
