@@ -101,7 +101,7 @@ class InputPin(Pin, anygpio.InputPin):
 
 	def value(self):
 		"""
-		Use this to return a curated, semantic value from the pins input
+		Use this to return a curated, semantic value from the pins input for watch()
 
 		This should return (0 or 1) for INACTIVE and ACTIVE respectively
 		If there is a pull up resistor this should return 0 for HIGH and 1 for LOW

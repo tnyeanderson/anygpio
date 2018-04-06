@@ -96,14 +96,14 @@ class InputPin(Pin, anygpio.InputPin):
 
 	def value(self):
 		"""
-		Use this to return a curated, semantic value from the pins input
+		Use this to return a curated, semantic value from the pins input for watch()
 
 		This should return (0 or 1) for INACTIVE and ACTIVE respectively
 		If there is a pull up resistor this should return 0 for HIGH and 1 for LOW
 		"""
 		# TEMPLATE: Change this if native_gpio.input() returns 1 when button is pressed
 		return int(not self.input() if self.pull_up_down else self.input())
-		
+
 	def input(self):
 		"""
 		Get input value of pin from the native GPIO library
@@ -111,28 +111,12 @@ class InputPin(Pin, anygpio.InputPin):
 		# TEMPLATE: Get input value of pin with native_gpio
 		return native_gpio.input(self.id)
 
-	def event(self, action=None, desired_value=None, both=False):
+	def _add_event(id, rising_or_falling, action):
 		"""
-		Registers an event handler for interrupt-driven GPIO if supported
-
-		Uses self.action as default callback
-		Uses self.desired_value to determine GPIO.RISING or GPIO.FALLING
+		Register an event callback with the native_gpio
 		"""
 
-		# Don't set self.action, just use it as default
-		action = action or self.action
-
-		# Set self.desired_value if desired_value is set
-		self.desired_value = desired_value or self.desired_value
-
-		# Determine RISING, FALLING, or BOTH
-		if both:
-			rising_or_falling = native_gpio.BOTH
-		else:
-			# Determine GPIO.RISING or GPIO.FALLING
-			rising_or_falling = wrapper._native_rising_falling(self.desired_value)
-
-		# Register the event callback
+		# TEMPLATE: Call the native event detect function
 		native_gpio.add_event_detect(self.id, rising_or_falling, self.action)
 
 
@@ -349,6 +333,14 @@ class GPIO(anygpio.GPIO):
 
 		return (native_gpio.RISING if value else native_gpio.FALLING)
 
+	def _add_event(id, rising_or_falling, action):
+		"""
+		Register an event callback with the native_gpio
+		"""
+
+		# TEMPLATE: Call the native event detect function
+		native_gpio.add_event_detect(id, rising_or_falling, action)
+
 	def cleanup(self):
 		"""
 		Run the native GPIO cleanup() function if available
@@ -370,6 +362,7 @@ wrapper = GPIO()
 # TEMPLATE: Set GPIO Supports:
 wrapper.supports.pwm = True
 wrapper.supports.pull_up_down = True
+wrapper.supports.events = True
 
 
 # Set the system to the name of the file

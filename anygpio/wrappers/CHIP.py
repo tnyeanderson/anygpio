@@ -96,7 +96,7 @@ class InputPin(Pin, anygpio.InputPin):
 
 	def value(self):
 		"""
-		Use this to return a curated, semantic value from the pins input
+		Use this to return a curated, semantic value from the pins input for watch()
 
 		This should return (0 or 1) for INACTIVE and ACTIVE respectively
 		If there is a pull up resistor this should return 0 for HIGH and 1 for LOW
@@ -110,6 +110,7 @@ class InputPin(Pin, anygpio.InputPin):
 		"""
 		# TEMPLATE: Get input value of pin with native_gpio
 		return native_gpio.GPIO.input(self.id)
+
 
 # TEMPLATE: Inherit from InputPin if output pins can be read
 class OutputPin(anygpio.OutputPin, InputPin):
@@ -268,6 +269,14 @@ class GPIO(anygpio.GPIO):
 		"""
 		return PWMPin(*args[1:])
 
+	# TEMPLATE: Change to RISING and FALLING of native_gpio
+	def _native_rising_falling(self, value):
+		"""
+		Returns GPIO.RISING (1) or GPIO.FALLING (0)
+		"""
+
+		return (native_gpio.GPIO.RISING if value else native_gpio.GPIO.FALLING)
+
 	# TEMPLATE: Change to PULL_UP or PULL_DOWN of native_gpio
 	def _native_pull_up_down(self, value):
 		"""
@@ -316,6 +325,15 @@ class GPIO(anygpio.GPIO):
 		This returns only InputPins
 		"""
 		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, OutputPin)]
+
+	def _add_event(id, rising_or_falling, action):
+		"""
+		Register an event callback with the native_gpio
+		"""
+
+		# TEMPLATE: Call the native event detect function
+		native_gpio.GPIO.add_event_detect(id, rising_or_falling)
+		native_gpio.GPIO.add_event_callback(id, action)
 
 	def cleanup(self):
 		"""

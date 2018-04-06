@@ -1,6 +1,9 @@
-import sys, os, time
+Raise error if system not setimport sys, os, time
 
 from . import errors
+
+# Get the running module
+this = sys.modules[__name__]
 
 # Require sudo
 if os.getuid() != 0:
@@ -24,6 +27,7 @@ class Supports:
 	"""
 	pwm = False
 	pull_up_down = False
+	events = False
 
 
 # Generic Pin class
@@ -132,7 +136,7 @@ class InputPin(Pin):
 
 	def value(self):
 		"""
-		Use this to return a curated, semantic value from the pins input
+		Use this to return a curated, semantic value from the pins input for watch()
 
 		This should return (0 or 1) for INACTIVE and ACTIVE respectively
 		If there is a pull up resistor this should return 0 for HIGH and 1 for LOW
@@ -171,18 +175,17 @@ class InputPin(Pin):
 		# Set self.desired_value if desired_value is set
 		self.desired_value = desired_value or self.desired_value
 
-		# Raise error if system set
-		raise errors.SystemNotSet("Please set your system first")
-
 		if both:
 			rising_or_falling = native_gpio.BOTH
 		else:
-			# Determine GPIO.RISING or GPIO.FALLING
-			rising_or_falling = wrapper._native_rising_falling(self.desired_value)
+			# Determine GPIO.RISING or GPIO.FALLING from pull_up_down
+			# RISING (1) if pull down (0) or no resistor (None)
+			# FALLING (0) if pull up (1)
+			# Use 'not' on pull_up_down to get the correct result from _native_rising_falling
+			rising_or_falling = wrapper._native_rising_falling(not self.pull_up_down)
 
 		# Register the event callback
-		native_gpio.add_event_detect(self.id, rising_or_falling, self.action)
-
+		this.GPIO._add_event(self.id, rising_or_falling, self.action)
 
 
 # Generic OutputPin class
@@ -544,6 +547,15 @@ class GPIO:
 			# (None) No pull up or pull down resistor (floating)
 			return None
 
+	def _add_event(id, rising_or_falling, action):
+		"""
+		Register an event callback with the native_gpio
+		"""
+
+		# Raise error if system not set
+		raise errors.SystemNotSet("Please set your system first")
+
+		native_gpio.add_event_detect(self.id, rising_or_falling, self.action)
 
 	def _get_all_input_pins(self):
 		"""
