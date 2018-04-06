@@ -498,13 +498,6 @@ class GPIO:
 		self._require_system_set()
 		self._destroy_all_pins()
 
-	@property
-	def both(self):
-		"""
-		Returns GPIO.BOTH
-		"""
-		return native_gpio.BOTH
-
 	def _get_rising_falling(self, value):
 		"""
 		Returns GPIO.RISING (1) or GPIO.FALLING (0)

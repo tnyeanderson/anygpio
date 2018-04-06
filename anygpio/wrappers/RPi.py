@@ -110,6 +110,30 @@ class InputPin(Pin, anygpio.InputPin):
 		# TEMPLATE: Get input value of pin with native_gpio
 		return native_gpio.input(self.id)
 
+	def event(self, action=None, desired_value=None, both=False):
+		"""
+		Registers an event handler for interrupt-driven GPIO if supported
+
+		Uses self.action as default callback
+		Uses self.desired_value to determine GPIO.RISING or GPIO.FALLING
+		"""
+
+		# Don't set self.action, just use it as default
+		action = action or self.action
+
+		# Set self.desired_value if desired_value is set
+		self.desired_value = desired_value or self.desired_value
+
+		# Determine RISING, FALLING, or BOTH
+		if both:
+			rising_or_falling = native_gpio.BOTH
+		else
+			# Determine GPIO.RISING or GPIO.FALLING
+			rising_or_falling = wrapper._get_rising_falling(self.desired_value)
+
+		# Register the event callback
+		native_gpio.add_event_detect(self.id, rising_or_falling, self.action)
+
 
 # TEMPLATE: Inherit from InputPin if output pins can be read
 class OutputPin(anygpio.OutputPin, InputPin):
