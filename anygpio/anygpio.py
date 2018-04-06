@@ -7,7 +7,7 @@ if os.getuid() != 0:
 	print("Requires sudo privileges")
 
 
-def do_nothing():
+def do_nothing(self=None):
 	"""
 	Don't do anything. Used as default pin.action
 	"""

@@ -43,7 +43,7 @@ from anygpio import GPIO
 
 
 
-Pins are initialized to inputs by default
+Pins are initialized to inputs by default, with a pull down resistor. The reason being that many input pins are buttons connected to ground by default.
 ```
 GPIO.setup_pin(18, "MY_BUTTON", my_button_pressed_function)
 ```
@@ -98,7 +98,7 @@ Can also call `stop_watching()` from signal triggered process. For an example, s
 ```
 GPIO.watch()
 
-# Change the interval (in seconds) between each check
+# Change the interval (in seconds) between each check (Default is 0.15)
 GPIO.watch(0.2)
 
 # Watch output pins also (if supported by system)
