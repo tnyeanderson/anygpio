@@ -323,6 +323,14 @@ class GPIO(anygpio.GPIO):
 		"""
 		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, OutputPin)]
 
+	# TEMPLATE: Change to RISING and FALLING of native_gpio
+	def _get_rising_falling(self, value):
+		"""
+		Returns GPIO.RISING (1) or GPIO.FALLING (0)
+		"""
+
+		return (native_gpio.RISING if value else native_gpio.FALLING)
+
 	def cleanup(self):
 		"""
 		Run the native GPIO cleanup() function if available
