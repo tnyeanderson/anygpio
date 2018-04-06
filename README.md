@@ -43,11 +43,12 @@ from anygpio import GPIO
 
 
 
-Pins are initialized to inputs by default, with a pull down resistor. The reason being that many input pins are buttons connected to ground by default.
+Pins are initialized to inputs by default, with a pull up resistor. The reason being that many input pins are buttons connected to ground by default.
 ```
 GPIO.setup_pin(18, "MY_BUTTON", my_button_pressed_function)
 ```
-or, more simply:
+
+This will set up a button on pin 18, connected to ground with a pull up resistor.
 ```
 GPIO.setup_pin(18)
 ```

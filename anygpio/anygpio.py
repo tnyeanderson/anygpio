@@ -23,6 +23,7 @@ class Supports:
 	In the future, this will contain pull_up_down, etc
 	"""
 	pwm = False
+	pull_up_down = False
 
 
 # Generic Pin class
@@ -104,7 +105,26 @@ class Pin:
 class InputPin(Pin):
 	"""
 	Derived class for storing GPIO input pin configurations and related methods
+
+	Attributes:
+		pull_up_down	Pull up or pull down resistor
+							0 is Pull Down
+							1 is Pull Up
+							None is no resistor
+							Default is 1 (PULL UP) for a button switch
 	"""
+
+	def __init__(self, id, name=None, action=anygpio.do_nothing, pull_up_down=1, **kwargs):
+		"""
+		Sets default values and constructs instance of Pin
+		"""
+		super().__init__(id, name, action, **kwargs)
+
+		# TEMPLATE: Parse number and header (if applicable) from id by running setter
+		self.pull_up_down = pull_up_down
+
+	# Pull up/down resistor
+	pull_up_down = 1
 
 	def setup(self):
 		"""
@@ -117,15 +137,16 @@ class InputPin(Pin):
 		"""
 		Use this to return a curated, semantic value from the pins input
 
-		This should return (0 or 1) for LOW and HIGH respectively
+		This should return (0 or 1) for INACTIVE and ACTIVE respectively
+		If there is a pull up resistor this should return 0 for HIGH and 1 for LOW
 		"""
-		return int(self.input())
+		return int(not self.input() if self.pull_up_down else self.input())
 
 	def input(self):
 		"""
 		Get input value of pin from the native GPIO library
 		"""
-		if (self.is_output):
+		if (isinstance(self, OutputPin)):
 			raise errors.WrongPinType("Pin is set to output")
 		else:
 			raise errors.SystemNotSet("Please set your system first")
@@ -160,7 +181,7 @@ class InputPin(Pin):
 			rising_or_falling = native_gpio.BOTH
 		else:
 			# Determine GPIO.RISING or GPIO.FALLING
-			rising_or_falling = wrapper._get_rising_falling(self.desired_value)
+			rising_or_falling = wrapper._native_rising_falling(self.desired_value)
 
 		# Register the event callback
 		native_gpio.add_event_detect(self.id, rising_or_falling, self.action)
@@ -498,7 +519,7 @@ class GPIO:
 		self._require_system_set()
 		self._destroy_all_pins()
 
-	def _get_rising_falling(self, value):
+	def _native_rising_falling(self, value):
 		"""
 		Returns GPIO.RISING (1) or GPIO.FALLING (0)
 		"""
@@ -506,6 +527,26 @@ class GPIO:
 		self._require_system_set()
 
 		return (native_gpio.RISING if value else native_gpio.FALLING)
+
+	def _native_pull_up_down(self, value):
+		"""
+		Returns GPIO.PUD_UP (1) or GPIO.PUD_DOWN (0) or None (None)
+		"""
+
+		self._require_system_set()
+
+		if value == 0:
+			# Pull down resistor
+			return native_gpio.PUD_DOWN
+
+		else if value == 1:
+			# Pull up resistor
+			return native_gpio.PUD_UP
+
+		else:
+			# (None) No pull up or pull down resistor (floating)
+			return None
+
 
 	def _get_all_input_pins(self):
 		"""

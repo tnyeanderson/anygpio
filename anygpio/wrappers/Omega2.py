@@ -97,7 +97,8 @@ class InputPin(Pin, anygpio.InputPin):
 		"""
 		Use this to return a curated, semantic value from the pins input
 
-		This should return (0 or 1) for LOW and HIGH respectively
+		This should return (0 or 1) for INACTIVE and ACTIVE respectively
+		If there is a pull up resistor this should return 0 for HIGH and 1 for LOW
 		"""
 		# TEMPLATE: Change this if native_gpio.input() returns 1 when button is pressed
 		return int(self.input())

@@ -92,16 +92,17 @@ class InputPin(Pin, anygpio.InputPin):
 		Initialize the input pin with the native_gpio
 		"""
 		# TEMPLATE: Initialize the input pin with the native_gpio
-		native_gpio.GPIO.setup(self.id, native_gpio.GPIO.IN, pull_up_down=native_gpio.GPIO.PUD_UP)
+		native_gpio.GPIO.setup(self.id, native_gpio.GPIO.IN, pull_up_down=wrapper._native_pull_up_down(self.pull_up_down))
 
 	def value(self):
 		"""
 		Use this to return a curated, semantic value from the pins input
 
-		This should return (0 or 1) for LOW and HIGH respectively
+		This should return (0 or 1) for INACTIVE and ACTIVE respectively
+		If there is a pull up resistor this should return 0 for HIGH and 1 for LOW
 		"""
 		# TEMPLATE: Change this if native_gpio.input() returns 1 when button is pressed
-		return int(self.input())
+		return int(not self.input() if self.pull_up_down else self.input())
 
 	def input(self):
 		"""
@@ -267,6 +268,24 @@ class GPIO(anygpio.GPIO):
 		"""
 		return PWMPin(*args[1:])
 
+	# TEMPLATE: Change to PULL_UP or PULL_DOWN of native_gpio
+	def _native_pull_up_down(self, value):
+		"""
+		Returns GPIO.PUD_UP (1) or GPIO.PUD_DOWN (0) or None (None)
+		"""
+
+		if value == 0:
+			# Pull down resistor
+			return native_gpio.GPIO.PUD_DOWN
+
+		else if value == 1:
+			# Pull up resistor
+			return native_gpio.GPIO.PUD_UP
+
+		else:
+			# (None) No pull up or pull down resistor (floating)
+			return None
+
 	# TEMPLATE: Change to LOW or HIGH of native_gpio
 	def _native_high_or_low(self, value):
 		"""
@@ -318,6 +337,7 @@ wrapper = GPIO()
 
 # TEMPLATE: Set GPIO Supports:
 wrapper.supports.pwm = True
+wrapper.supports.pull_up_down = True
 
 
 # Set the system to the name of the file
