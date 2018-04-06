@@ -41,38 +41,66 @@ Then:
 from anygpio import GPIO
 ```
 
+---
 
+## Pin initialization
+
+### Input pins
 
 Pins are initialized to inputs by default, with a pull up resistor. The reason being that many input pins are buttons connected to ground by default.
 ```
 GPIO.setup_pin(18, "MY_BUTTON", my_button_pressed_function)
 ```
 
-This will set up a button on pin 18, connected to ground with a pull up resistor.
+This will set up a button on pin with `id=18`, connected to ground with a *pull up* resistor.
 ```
 GPIO.setup_pin(18)
 ```
 
+### Output pins
+
+Default initial value is always `0` (LOW) unless set here
+```
+GPIO.setup_pin(18, "MY_OUTPUTTER", is_output=True, initial_value=1)
+```
+
 ---
+
+## Using pins
 
 Return a `pin` from the `pin` array
 ```
+# Searches by `pin.number` (int)
 GPIO.pin(18)
+
+# Searches by `pin.name` (string)
 GPIO.pin("MY_BUTTON")
 ```
-
----
 
 In `GPIO.pin(id)`, `id` is what will be passed to the Native GPIO library to identify the pin.
 
 In RPi, this is the same as `pin.number` but on other systems (like BeagleBone) it is a combination of `pin.number` and `pin.header` (`'p9_10'`) or something else entirely (C.H.I.P)!
+
+If searching for an `id` that is a string (like on CHIP or BeagleBone), set `id` explicitly
 ```
-GPIO.pin("p9_10")
+GPIO.pin(id="p9_10")
 ```
 
----
+### Destroy a pin
+```
+GPIO.pin(18).destroy()
+```
 
-Curated input value. Buttons should be `1` (True) when pressed, and `0` (False) when not pressed
+### Reading input pins
+
+Actual input value:
+```
+# Pull up resistor by default!
+# returns: 1
+print(GPIO.pin(18).input())
+```
+
+Curated input value. Buttons should be `1` (True) when pressed, and `0` (False) when not pressed:
 ```
 # returns: 0
 print(GPIO.pin(18).value())
@@ -80,13 +108,7 @@ print(GPIO.pin(18).value())
 
 ---
 
-Actual input value
-```
-# returns: 1
-print(GPIO.pin(18).input())
-```
-
----
+### Watch pins (infinite loop)
 
 Watch all InputPins for their `desired_value` and run their respective `action` methods if they match
 
@@ -108,13 +130,26 @@ GPIO.watch(watch_outputs=True)
 
 ---
 
-Set up output pin
-Default initial value is always `0` (LOW) unless set here
+### Interrupt Driven GPIO
+
+Register an event callback for the given pin, using `pin.action` as default callback
+
+If pin 18 is hooked up to a button and the button is pressed, `my_button_pressed_function()` will be run.
+
+RISING or FALLING is determined by pull up or pull down resistor by default
+
+Events cannot be deregistered yet. Bounce time and explicit setting of RISING/FALLING coming soon!
+
 ```
-GPIO.setup_pin(18, "MY_OUTPUTTER", is_output=True, initial_value=1)
+GPIO.event()
+
+# Use a different callback
+GPIO.event(action=my_different_callback)
+
+# Watch for both RISING and FALLING events
+GPIO.event(both=True)
 ```
 
----
 
 Output LOW to a pin
 ```
@@ -123,12 +158,22 @@ GPIO.pin(18).output(0)
 
 ---
 
+### Output to pins
+
 Output HIGH to a pin
 ```
 GPIO.pin(18).output(1)
 ```
 
+Output LOW to a pin
+```
+GPIO.pin(18).output(0)
+```
+
+
 ---
+
+### PWM Pins
 
 Set up PWM pin
 ```
@@ -158,10 +203,16 @@ GPIO.pin(18).change_duty_cycle(75)
 
 ---
 
+## Cleaning up
 
 Run native GPIO cleanup functions
 ```
 GPIO.cleanup()
+```
+
+After cleaning up, if you need to start using GPIO again from within your program, first re-initialize the GPIO
+```
+GPIO.setup()
 ```
 
 ---
