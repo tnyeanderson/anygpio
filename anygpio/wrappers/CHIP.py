@@ -111,6 +111,24 @@ class InputPin(Pin, anygpio.InputPin):
 		# TEMPLATE: Get input value of pin with native_gpio
 		return native_gpio.GPIO.input(self.id)
 
+	def _add_event(*args):
+		"""
+		Call the wrapper._add_event() method
+
+		This has to be here to have access to the wrapper variable
+		"""
+
+		wrapper._add_event(*args)
+
+	def _native_rising_falling(*args):
+		"""
+		Call the wrapper._native_rising_falling() method
+
+		This has to be here to have access to the wrapper variable
+		"""
+
+		wrapper._native_rising_falling(*args)
+
 
 # TEMPLATE: Inherit from InputPin if output pins can be read
 class OutputPin(anygpio.OutputPin, InputPin):

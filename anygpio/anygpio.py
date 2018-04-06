@@ -73,7 +73,7 @@ class Pin:
 
 	def _require_system_set(self):
 		"""
-		Raise an exception if the system is not set
+		Raise an exception since the system is not set
 		"""
 		raise errors.SystemNotSet("Please set your system first")
 
@@ -180,6 +180,8 @@ class InputPin(Pin):
 		# Set self.desired_value if desired_value is set
 		self.desired_value = desired_value or self.desired_value
 
+		self._require_system_set()
+
 		if both:
 			rising_or_falling = native_gpio.BOTH
 		else:
@@ -187,10 +189,31 @@ class InputPin(Pin):
 			# RISING (1) if pull down (0) or no resistor (None)
 			# FALLING (0) if pull up (1)
 			# Use 'not' on pull_up_down to get the correct result from _native_rising_falling
-			rising_or_falling = this.GPIO._native_rising_falling(not self.pull_up_down)
+			rising_or_falling = self._native_rising_falling(not self.pull_up_down)
 
 		# Register the event callback
-		this.GPIO._add_event(self.id, rising_or_falling, self.action)
+		self._add_event(self.id, rising_or_falling, self.action)
+
+	def _add_event(*args):
+		"""
+		Call the wrapper._add_event() method
+
+		This has to be here to have access to the wrapper variable
+		"""
+		self._require_system_set()
+
+		wrapper._add_event(*args)
+
+	def _native_rising_falling(*args):
+		"""
+		Call the wrapper._native_rising_falling() method
+
+		This has to be here to have access to the wrapper variable
+		"""
+		self._require_system_set()
+
+		wrapper._native_rising_falling(*args)
+
 
 
 # Generic OutputPin class
