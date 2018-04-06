@@ -114,7 +114,7 @@ class InputPin(Pin):
 							Default is 1 (PULL UP) for a button switch
 	"""
 
-	def __init__(self, id, name=None, action=anygpio.do_nothing, pull_up_down=1, **kwargs):
+	def __init__(self, id, name=None, action=do_nothing, pull_up_down=1, **kwargs):
 		"""
 		Sets default values and constructs instance of Pin
 		"""
