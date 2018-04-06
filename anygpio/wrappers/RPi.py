@@ -127,7 +127,7 @@ class InputPin(Pin, anygpio.InputPin):
 		# Determine RISING, FALLING, or BOTH
 		if both:
 			rising_or_falling = native_gpio.BOTH
-		else
+		else:
 			# Determine GPIO.RISING or GPIO.FALLING
 			rising_or_falling = wrapper._get_rising_falling(self.desired_value)
 
