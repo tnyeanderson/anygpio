@@ -409,25 +409,25 @@ class GPIO:
 		"""
 		Create an instance of Pin
 		"""
-		return Pin(*args[1:])
+		return Pin(*args[1:], **kwargs)
 
 	def _create_InputPin_instance(*args, **kwargs):
 		"""
 		Create an instance of InputPin
 		"""
-		return InputPin(*args[1:])
+		return InputPin(*args[1:], **kwargs)
 
 	def _create_OutputPin_instance(*args, **kwargs):
 		"""
 		Create an instance of OutputPin
 		"""
-		return OutputPin(*args[1:])
+		return OutputPin(*args[1:], **kwargs)
 
 	def _create_PWMPin_instance(*args, **kwargs):
 		"""
 		Create an instance of PWMPin
 		"""
-		return PWMPin(*args[1:])
+		return PWMPin(*args[1:], **kwargs)
 
 	def _add_pin(self, pin):
 		"""
