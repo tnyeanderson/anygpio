@@ -123,9 +123,6 @@ class InputPin(Pin):
 		# TEMPLATE: Parse number and header (if applicable) from id by running setter
 		self.pull_up_down = pull_up_down
 
-	# Pull up/down resistor
-	pull_up_down = 1
-
 	def setup(self):
 		"""
 		Initialize the input pin with the native_gpio
