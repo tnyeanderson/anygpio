@@ -123,11 +123,11 @@ class InputPin(Pin):
 							Default is 1 (PULL UP) for a button switch
 	"""
 
-	def __init__(self, id, name=None, action=do_nothing, pull_up_down=1, **kwargs):
+	def __init__(*args, **kwargs):
 		"""
 		Sets default values and constructs instance of Pin
 		"""
-		super().__init__(id, name, action, **kwargs)
+		super().__init__(*args, **kwargs)
 
 		# TEMPLATE: Parse number and header (if applicable) from id by running setter
 		self.pull_up_down = pull_up_down
@@ -387,7 +387,7 @@ class GPIO:
 		if not self.system:
 			raise errors.SystemNotSet("Please set your system first")
 
-	def setup_pin(self, id, name=None, action=do_nothing, is_output=False, **kwargs):
+	def setup_pin(self, id, name=None, action=do_nothing, is_output=False,  **kwargs):
 		"""
 		Use this to initialize a pin
 
