@@ -138,13 +138,16 @@ If pin 18 is hooked up to a button and the button is pressed, `my_button_pressed
 
 RISING or FALLING is determined by pull up or pull down resistor by default
 
-Events cannot be deregistered yet. Bounce time and explicit setting of RISING/FALLING coming soon!
+Explicit setting of RISING/FALLING coming soon!
 
 ```
 GPIO.pin(18).event()
 
 # Use a different callback
 GPIO.pin(18).event(action=my_different_callback)
+
+# Set a different bounce time in milliseconds (Default: 300ms)
+GPIO.pin(18).event(bounce=1000)
 
 # Watch for both RISING and FALLING events
 GPIO.pin(18).event(both=True)

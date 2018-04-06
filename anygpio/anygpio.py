@@ -166,7 +166,7 @@ class InputPin(Pin):
 		"""
 		return (self.value() == self.desired_value)
 
-	def event(self, action=None, desired_value=None, both=False):
+	def event(self, action=None, desired_value=None, bounce=None, both=False):
 		"""
 		Registers an event handler for interrupt-driven GPIO if supported
 
@@ -190,7 +190,7 @@ class InputPin(Pin):
 			rising_or_falling = self._native_rising_falling(not self.pull_up_down)
 
 		# Register the event callback
-		self._add_event(rising_or_falling, self.action)
+		self._add_event(rising_or_falling, self.action, bounce)
 
 	def remove_event(self):
 		"""
@@ -199,13 +199,15 @@ class InputPin(Pin):
 
 		self._remove_event()
 
-	def _add_event(self, rising_or_falling, action):
+	def _add_event(self, rising_or_falling, action, bounce=300):
 		"""
 		Call the native add_event_detect() method
+
+		Bounce is set in milliseconds, default 300ms
 		"""
 		self._require_system_set()
 
-		# native_gpio.add_event_detect(self.id, rising_or_falling, action)
+		# native_gpio.add_event_detect(self.id, rising_or_falling, action, bouncetime=bounce)
 
 	def _remove_event(self):
 		"""

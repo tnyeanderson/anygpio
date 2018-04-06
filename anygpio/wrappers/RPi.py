@@ -111,13 +111,13 @@ class InputPin(Pin, anygpio.InputPin):
 		# TEMPLATE: Get input value of pin with native_gpio
 		return native_gpio.input(self.id)
 
-	def _add_event(self, rising_or_falling, action):
+	def _add_event(self, rising_or_falling, action, bounce=300):
 		"""
 		Register an event callback with the native_gpio
 		"""
 
 		# TEMPLATE: Call the native add_event_detect function
-		native_gpio.add_event_detect(self.id, rising_or_falling, action)
+		native_gpio.add_event_detect(self.id, rising_or_falling, action, bouncetime=bounce)
 
 	def _remove_event(self):
 		"""
