@@ -278,7 +278,7 @@ class GPIO(anygpio.GPIO):
 		return PWMPin(*args[1:])
 
 	# TEMPLATE: Change to LOW or HIGH of native_gpio
-	def _native_high_or_low(self, value):
+	def _native_high_or_low(value):
 		"""
 		Returns LOW or HIGH value from native_gpio
 
@@ -308,7 +308,7 @@ class GPIO(anygpio.GPIO):
 		"""
 		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, OutputPin)]
 
-	def _native_pull_up_down(self, value):
+	def _native_pull_up_down(value):
 		"""
 		Returns GPIO.PUD_UP (1) or GPIO.PUD_DOWN (0) or None (None)
 		"""
@@ -326,7 +326,7 @@ class GPIO(anygpio.GPIO):
 			return None
 
 	# TEMPLATE: Change to RISING and FALLING of native_gpio
-	def _native_rising_falling(self, value):
+	def _native_rising_falling(value):
 		"""
 		Returns GPIO.RISING (1) or GPIO.FALLING (0)
 		"""
