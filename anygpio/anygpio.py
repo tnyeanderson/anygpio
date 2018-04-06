@@ -190,17 +190,31 @@ class InputPin(Pin):
 			rising_or_falling = self._native_rising_falling(not self.pull_up_down)
 
 		# Register the event callback
-		self._add_event(self.id, rising_or_falling, self.action)
+		self._add_event(rising_or_falling, self.action)
 
-	def _add_event(*args):
+	def remove_event(self):
 		"""
-		Call the wrapper._add_event() method
-
-		This has to be here to have access to the wrapper variable
+		Deregisters event handlers for the pin
 		"""
 		self._require_system_set()
 
-		return wrapper._add_event(*args[1:])
+		self._remove_event(self.id)
+
+	def _add_event(self, rising_or_falling, action):
+		"""
+		Call the native add_event_detect() method
+		"""
+		self._require_system_set()
+
+		# native_gpio.add_event_detect(self.id, rising_or_falling, action)
+
+	def _remove_event(self):
+		"""
+		Call the native remove_event_detect() method
+		"""
+		self._require_system_set()
+
+		# native_gpio.remove_event_detect(self.id, rising_or_falling, action)
 
 	def _native_rising_falling(*args):
 		"""
@@ -572,16 +586,6 @@ class GPIO:
 		else:
 			# (None) No pull up or pull down resistor (floating)
 			return None
-
-	def _add_event(self, id, rising_or_falling, action):
-		"""
-		Register an event callback with the native_gpio
-		"""
-
-		# Raise error if system not set
-		self._require_system_set()
-
-		native_gpio.add_event_detect(self.id, rising_or_falling, self.action)
 
 	def _get_all_input_pins(self):
 		"""

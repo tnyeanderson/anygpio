@@ -141,19 +141,16 @@ RISING or FALLING is determined by pull up or pull down resistor by default
 Events cannot be deregistered yet. Bounce time and explicit setting of RISING/FALLING coming soon!
 
 ```
-GPIO.event()
+GPIO.pin(18).event()
 
 # Use a different callback
-GPIO.event(action=my_different_callback)
+GPIO.pin(18).event(action=my_different_callback)
 
 # Watch for both RISING and FALLING events
-GPIO.event(both=True)
-```
+GPIO.pin(18).event(both=True)
 
-
-Output LOW to a pin
-```
-GPIO.pin(18).output(0)
+# Deregister an event callback
+GPIO.pin(18).remove_event()
 ```
 
 ---

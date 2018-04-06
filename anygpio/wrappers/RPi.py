@@ -111,14 +111,22 @@ class InputPin(Pin, anygpio.InputPin):
 		# TEMPLATE: Get input value of pin with native_gpio
 		return native_gpio.input(self.id)
 
-	def _add_event(*args):
+	def _add_event(self, rising_or_falling, action):
 		"""
-		Call the wrapper._add_event() method
-
-		This has to be here to have access to the wrapper variable
+		Register an event callback with the native_gpio
 		"""
 
-		return wrapper._add_event(*args[1:])
+		# TEMPLATE: Call the native add_event_detect function
+		native_gpio.add_event_detect(self.id, rising_or_falling, action)
+
+	def _remove_event(self):
+		"""
+		Call the native remove_event_detect() method
+		"""
+		self._require_system_set()
+
+		# TEMPLATE: Call the native remove_event_detect() method
+		native_gpio.remove_event_detect(self.id)
 
 	def _native_rising_falling(*args):
 		"""
@@ -334,15 +342,6 @@ class GPIO(anygpio.GPIO):
 		"""
 
 		return (native_gpio.RISING if value else native_gpio.FALLING)
-
-
-	def _add_event(self, id, rising_or_falling, action):
-		"""
-		Register an event callback with the native_gpio
-		"""
-
-		# TEMPLATE: Call the native event detect function
-		native_gpio.add_event_detect(id, rising_or_falling, action)
 
 	def cleanup(self):
 		"""
