@@ -1,4 +1,4 @@
-Raise error if system not setimport sys, os, time
+import sys, os, time
 
 from . import errors
 
