@@ -387,7 +387,7 @@ class GPIO:
 		if not self.system:
 			raise errors.SystemNotSet("Please set your system first")
 
-	def setup_pin(self, number, name=None, action=do_nothing, is_output=False, **kwargs):
+	def setup_pin(self, id, name=None, action=do_nothing, is_output=False, **kwargs):
 		"""
 		Use this to initialize a pin
 
@@ -398,10 +398,10 @@ class GPIO:
 		# Create the correct type of Pin
 		if is_output:
 			# Output pin
-			pin = self._create_OutputPin_instance(number, name, action, **kwargs)
+			pin = self._create_OutputPin_instance(id, name, action, **kwargs)
 		else:
 			# Input pin
-			pin = self._create_InputPin_instance(number, name, action, **kwargs)
+			pin = self._create_InputPin_instance(id, name, action, **kwargs)
 		pin.setup()
 		self._add_pin(pin)
 

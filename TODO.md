@@ -6,6 +6,8 @@
 * Pull up and pull down resistor setting
 * Improve README
 * Event-driven IO
+	- Bounce time
+	- Omega2 and BeagleBone
 
 Wrappers for:
   - Orange Pi
