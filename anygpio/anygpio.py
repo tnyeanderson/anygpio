@@ -349,7 +349,7 @@ class GPIO:
 		self.native = None
 		self._watching = False
 
-	def _native_high_or_low(value):
+	def _native_high_or_low(self, value):
 		"""
 		Returns LOW or HIGH value from native_gpio
 
@@ -524,7 +524,7 @@ class GPIO:
 		self._require_system_set()
 		self._destroy_all_pins()
 
-	def _native_rising_falling(value):
+	def _native_rising_falling(self, value):
 		"""
 		Returns GPIO.RISING (1) or GPIO.FALLING (0)
 		"""
@@ -533,7 +533,7 @@ class GPIO:
 
 		return (native_gpio.RISING if value else native_gpio.FALLING)
 
-	def _native_pull_up_down(value):
+	def _native_pull_up_down(self, value):
 		"""
 		Returns GPIO.PUD_UP (1) or GPIO.PUD_DOWN (0) or None (None)
 		"""

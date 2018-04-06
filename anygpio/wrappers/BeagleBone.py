@@ -275,7 +275,7 @@ class GPIO(anygpio.GPIO):
 		return PWMPin(*args[1:])
 
 	# TEMPLATE: Change to LOW or HIGH of native_gpio
-	def _native_high_or_low(value):
+	def _native_high_or_low(self, value):
 		"""
 		Returns LOW or HIGH value from native_gpio
 
