@@ -89,10 +89,10 @@ class InputPin(Pin, anygpio.InputPin):
 		"""
 		Initialize the input pin with the native_gpio
 
-		Initialized with pull down resistor (if available)
+		Initialized with pull up resistor (if available)
 		"""
 		# TEMPLATE: Initialize the input pin with the native_gpio
-		native_gpio.setup(self.id, native_gpio.IN, pull_up_down=native_gpio.PUD_DOWN)
+		native_gpio.setup(self.id, native_gpio.IN, pull_up_down=native_gpio.PUD_UP)
 
 	def value(self):
 		"""
@@ -101,7 +101,7 @@ class InputPin(Pin, anygpio.InputPin):
 		This should return (0 or 1) for LOW and HIGH respectively
 		"""
 		# TEMPLATE: Change this if native_gpio.input() returns 1 when button is pressed
-		return int(self.input())
+		return int(not self.input())
 
 	def input(self):
 		"""

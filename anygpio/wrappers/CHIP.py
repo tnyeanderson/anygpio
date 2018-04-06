@@ -92,7 +92,7 @@ class InputPin(Pin, anygpio.InputPin):
 		Initialize the input pin with the native_gpio
 		"""
 		# TEMPLATE: Initialize the input pin with the native_gpio
-		native_gpio.GPIO.setup(self.id, native_gpio.GPIO.IN, pull_up_down=native_gpio.GPIO.PUD_DOWN)
+		native_gpio.GPIO.setup(self.id, native_gpio.GPIO.IN, pull_up_down=native_gpio.GPIO.PUD_UP)
 
 	def value(self):
 		"""
