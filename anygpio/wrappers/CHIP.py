@@ -278,7 +278,7 @@ class GPIO(anygpio.GPIO):
 			# Pull down resistor
 			return native_gpio.GPIO.PUD_DOWN
 
-		else if value == 1:
+		elif value == 1:
 			# Pull up resistor
 			return native_gpio.GPIO.PUD_UP
 
