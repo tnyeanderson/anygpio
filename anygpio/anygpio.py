@@ -264,6 +264,7 @@ class OutputPin(Pin):
 		self._require_system_set()
 		# native_gpio.setup(self.id, native_gpio.OUT, initial=self._native_high_or_low(self.initial_value))
 
+
 # Generic PWM Pin class
 class PWMPin(OutputPin):
 	"""

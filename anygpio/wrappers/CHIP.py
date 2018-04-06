@@ -262,40 +262,40 @@ class GPIO(anygpio.GPIO):
 		pass
 
 	# This has to be here to use the overridden Pin class
-	def _create_Pin_instance(*args):
+	def _create_Pin_instance(*args, **kwargs):
 		"""
 		Create an instance of Pin
 
 		Must be included in wrapper GPIO class to use overridden Pin Class
 		"""
-		return Pin(*args[1:])
+		return Pin(*args[1:], **kwargs)
 
 	# This has to be here to use the overridden InputPin class
-	def _create_InputPin_instance(*args):
+	def _create_InputPin_instance(*args, **kwargs):
 		"""
 		Create an instance of InputPin
 
 		Must be included in wrapper GPIO class to use overridden InputPin Class
 		"""
-		return InputPin(*args[1:])
+		return InputPin(*args[1:], **kwargs)
 
 	# This has to be here to use the overridden OutputPin class
-	def _create_OutputPin_instance(*args):
+	def _create_OutputPin_instance(*args, **kwargs):
 		"""
 		Create an instance of OutputPin
 
 		Must be included in wrapper GPIO class to use overridden OutputPin Class
 		"""
-		return OutputPin(*args[1:])
+		return OutputPin(*args[1:], **kwargs)
 
 	# This has to be here to use the overridden PWMPin class
-	def _create_PWMPin_instance(*args):
+	def _create_PWMPin_instance(*args, **kwargs):
 		"""
 		Create an instance of PWMPin
 
 		Must be included in wrapper GPIO class to use overridden PWMPin Class
 		"""
-		return PWMPin(*args[1:])
+		return PWMPin(*args[1:], **kwargs)
 
 	# TEMPLATE: Change to RISING and FALLING of native_gpio
 	def _native_rising_falling(self, value):
