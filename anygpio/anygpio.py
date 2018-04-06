@@ -182,7 +182,7 @@ class InputPin(Pin):
 			# RISING (1) if pull down (0) or no resistor (None)
 			# FALLING (0) if pull up (1)
 			# Use 'not' on pull_up_down to get the correct result from _native_rising_falling
-			rising_or_falling = wrapper._native_rising_falling(not self.pull_up_down)
+			rising_or_falling = this.GPIO._native_rising_falling(not self.pull_up_down)
 
 		# Register the event callback
 		this.GPIO._add_event(self.id, rising_or_falling, self.action)
