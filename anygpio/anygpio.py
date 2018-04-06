@@ -71,6 +71,11 @@ class Pin:
 		self.supports = Supports()
 		self.native = None
 
+	def _require_system_set(self):
+		"""
+		Raise an exception if the system is not set
+		"""
+		raise errors.SystemNotSet("Please set your system first")
 
 	@property
 	def id(self):
@@ -93,7 +98,7 @@ class Pin:
 		"""
 		Initialize the pin with the native_gpio
 		"""
-		this.GPIO._require_system_set()
+		self._require_system_set()
 
 	def destroy(self):
 		"""
@@ -101,7 +106,7 @@ class Pin:
 
 		Subsequently calls GPIO.drop_pin()
 		"""
-		this.GPIO._require_system_set()
+		self._require_system_set()
 		# wrapper.drop_pin(self)
 
 
@@ -131,7 +136,7 @@ class InputPin(Pin):
 		"""
 		Initialize the input pin with the native_gpio
 		"""
-		this.GPIO._require_system_set()
+		self._require_system_set()
 		# native_gpio.setup(self.id, native_gpio.IN)
 
 	def value(self):
@@ -150,7 +155,7 @@ class InputPin(Pin):
 		if (isinstance(self, OutputPin)):
 			raise errors.WrongPinType("Pin is set to output")
 		else:
-			this.GPIO._require_system_set()
+			self._require_system_set()
 			# return native_gpio.getPinInput(pin.id)
 
 	def test(self):
@@ -213,14 +218,14 @@ class OutputPin(Pin):
 		value should be (0 or 1).
 		native_gpio.outputToPin(pin.id, GPIO._native_high_or_low(value))
 		"""
-		this.GPIO._require_system_set()
+		self._require_system_set()
 		# raise errors.WrongPinType("Pin is set to input")
 
 	def setup(self):
 		"""
 		Initialize the output pin with the native_gpio
 		"""
-		this.GPIO._require_system_set()
+		self._require_system_set()
 		# native_gpio.setup(self.id, native_gpio.OUT, initial=self._native_high_or_low(self.initial_value))
 
 # Generic PWM Pin class
@@ -247,7 +252,7 @@ class PWMPin(OutputPin):
 		self.duty_cycle = duty_cycle or 0
 
 		# Raise error since this should be overridden by wrapper derived class
-		this.GPIO._require_system_set()
+		self._require_system_set()
 
 		# Run OutputPin.setup() to set up as output pin first if needed
 		OutputPin.setup(self)
@@ -264,7 +269,7 @@ class PWMPin(OutputPin):
 		self.duty_cycle = duty_cycle or self.duty_cycle
 
 		# Raise error since this should be overridden by wrapper derived class
-		this.GPIO._require_system_set()
+		self._require_system_set()
 
 
 		# Start PWM on the native_gpio
@@ -279,7 +284,7 @@ class PWMPin(OutputPin):
 		"""
 
 		# Raise error since this should be overridden by wrapper derived class
-		this.GPIO._require_system_set()
+		self._require_system_set()
 
 		# Stop PWM on the native_gpio
 		#self.native.stop()
@@ -293,7 +298,7 @@ class PWMPin(OutputPin):
 		"""
 
 		# Raise error since this should be overridden by wrapper derived class
-		this.GPIO._require_system_set()
+		self._require_system_set()
 
 		# Run native ChangeDutyCycle function
 		# self.native.ChangeFrequency(value)
@@ -304,7 +309,7 @@ class PWMPin(OutputPin):
 		"""
 
 		# Raise error since this should be overridden by wrapper derived class
-		this.GPIO._require_system_set()
+		self._require_system_set()
 
 		# Run native ChangeDutyCycle function
 		# self.native.ChangeDutyCycle(value)
@@ -315,7 +320,7 @@ class PWMPin(OutputPin):
 
 		Stops PWM on pin, deconfigs, then calls GPIO.drop_pin()
 		"""
-		this.GPIO._require_system_set()
+		self._require_system_set()
 		# self.stop()
 		# wrapper.drop_pin(self)
 
@@ -351,7 +356,7 @@ class GPIO:
 		Value can be (0 or 1) or (True or False)
 		"""
 
-		this.GPIO._require_system_set()
+		self._require_system_set()
 		# return native_gpio.HIGH if value else native_gpio.LOW
 
 	def _require_system_set(self):
@@ -359,7 +364,7 @@ class GPIO:
 		Raise an exception if the system is not set
 		"""
 		if not self.system:
-			this.GPIO._require_system_set()
+			raise errors.SystemNotSet("Please set your system first")
 
 	def setup_pin(self, number, name=None, action=do_nothing, is_output=False, **kwargs):
 		"""
@@ -367,7 +372,7 @@ class GPIO:
 
 		Pins should call their own setup()
 		"""
-		this.GPIO._require_system_set()
+		self._require_system_set()
 
 		# Create the correct type of Pin
 		if is_output:
@@ -418,7 +423,7 @@ class GPIO:
 
 		This should handle pin deconfiguration if required by system
 		"""
-		this.GPIO._require_system_set()
+		self._require_system_set()
 		self._remove_pin(pin)
 
 	def _destroy_all_pins(self):
@@ -444,7 +449,7 @@ class GPIO:
 		Use explicit argument for name
 		PWM pins should call their own setup()
 		"""
-		this.GPIO._require_system_set()
+		self._require_system_set()
 
 		if not self.supports.pwm:
 			raise GPIOFunctionNotSupported("PWM is not supported on system")
@@ -508,7 +513,7 @@ class GPIO:
 		Can be performed after GPIO.cleanup()
 		Set numbering mode, etc
 		"""
-		this.GPIO._require_system_set()
+		self._require_system_set()
 
 	def cleanup(self):
 		"""
@@ -516,7 +521,7 @@ class GPIO:
 
 		Should also _destroy_all_pins()
 		"""
-		this.GPIO._require_system_set()
+		self._require_system_set()
 		self._destroy_all_pins()
 
 	def _native_rising_falling(value):
@@ -524,7 +529,7 @@ class GPIO:
 		Returns GPIO.RISING (1) or GPIO.FALLING (0)
 		"""
 
-		this.GPIO._require_system_set()
+		self._require_system_set()
 
 		return (native_gpio.RISING if value else native_gpio.FALLING)
 
@@ -533,7 +538,7 @@ class GPIO:
 		Returns GPIO.PUD_UP (1) or GPIO.PUD_DOWN (0) or None (None)
 		"""
 
-		this.GPIO._require_system_set()
+		self._require_system_set()
 
 		if value == 0:
 			# Pull down resistor
@@ -553,7 +558,7 @@ class GPIO:
 		"""
 
 		# Raise error if system not set
-		this.GPIO._require_system_set()
+		self._require_system_set()
 
 		native_gpio.add_event_detect(self.id, rising_or_falling, self.action)
 
