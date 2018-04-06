@@ -123,7 +123,6 @@ class InputPin(Pin, anygpio.InputPin):
 		"""
 		Call the native remove_event_detect() method
 		"""
-		self._require_system_set()
 
 		# TEMPLATE: Call the native remove_event_detect() method
 		native_gpio.GPIO.remove_event_detect(self.id)
