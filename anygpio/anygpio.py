@@ -57,7 +57,7 @@ class Pin:
 		native			Native GPIO pin object if applicable
 	"""
 
-	def __init__(self, id, name=None, action=do_nothing, **kwargs):
+	def __init__(self, id, name=None, action=do_nothing, *args, **kwargs):
 		"""
 		Sets default values and constructs instance of Pin
 		"""
@@ -123,11 +123,11 @@ class InputPin(Pin):
 							Default is 1 (PULL UP) for a button switch
 	"""
 
-	def __init__(*args, **kwargs):
+	def __init__(self, id, name=None, action=do_nothing, pull_up_down=1, *args, **kwargs):
 		"""
 		Sets default values and constructs instance of Pin
 		"""
-		super().__init__(*args, **kwargs)
+		super().__init__(id, name, action, *args, **kwargs)
 
 		# TEMPLATE: Parse number and header (if applicable) from id by running setter
 		self.pull_up_down = pull_up_down
@@ -223,13 +223,13 @@ class OutputPin(Pin):
 		initial_value	If the pin is an output, this determines initial state
 							(0 or 1)
 	"""
-	def __init__(self, id, name=None, action=do_nothing, **kwargs):
+	def __init__(self, id, name=None, action=do_nothing, *args, **kwargs):
 		"""
 		Sets default values and constructs instance of an InputPin
 		"""
 
 		# Run __init__ from parent class
-		super().__init__(id, name, action, **kwargs)
+		super().__init__(id, name, action, *args, **kwargs)
 		self.initial_value = kwargs.get("initial_value") or 0
 
 	def output(self, value):
@@ -387,7 +387,7 @@ class GPIO:
 		if not self.system:
 			raise errors.SystemNotSet("Please set your system first")
 
-	def setup_pin(self, id, name=None, action=do_nothing, is_output=False,  **kwargs):
+	def setup_pin(self, id, name=None, action=do_nothing, is_output=False, *args, **kwargs):
 		"""
 		Use this to initialize a pin
 
@@ -398,32 +398,32 @@ class GPIO:
 		# Create the correct type of Pin
 		if is_output:
 			# Output pin
-			pin = self._create_OutputPin_instance(id, name, action, **kwargs)
+			pin = self._create_OutputPin_instance(id, name, action, *args, **kwargs)
 		else:
 			# Input pin
-			pin = self._create_InputPin_instance(id, name, action, **kwargs)
+			pin = self._create_InputPin_instance(id, name, action, *args, **kwargs)
 		pin.setup()
 		self._add_pin(pin)
 
-	def _create_Pin_instance(*args):
+	def _create_Pin_instance(*args, **kwargs):
 		"""
 		Create an instance of Pin
 		"""
 		return Pin(*args[1:])
 
-	def _create_InputPin_instance(*args):
+	def _create_InputPin_instance(*args, **kwargs):
 		"""
 		Create an instance of InputPin
 		"""
 		return InputPin(*args[1:])
 
-	def _create_OutputPin_instance(*args):
+	def _create_OutputPin_instance(*args, **kwargs):
 		"""
 		Create an instance of OutputPin
 		"""
 		return OutputPin(*args[1:])
 
-	def _create_PWMPin_instance(*args):
+	def _create_PWMPin_instance(*args, **kwargs):
 		"""
 		Create an instance of PWMPin
 		"""
