@@ -196,7 +196,6 @@ class InputPin(Pin):
 		"""
 		Deregisters event handlers for the pin
 		"""
-		self._require_system_set()
 
 		self._remove_event(self.id)
 
