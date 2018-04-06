@@ -344,7 +344,7 @@ class GPIO(anygpio.GPIO):
 		"""
 		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, OutputPin)]
 
-	def _add_event(id, rising_or_falling, action):
+	def _add_event(self, id, rising_or_falling, action):
 		"""
 		Register an event callback with the native_gpio
 		"""

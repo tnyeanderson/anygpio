@@ -343,7 +343,7 @@ class GPIO(anygpio.GPIO):
 
 		return (native_gpio.RISING if value else native_gpio.FALLING)
 
-	def _add_event(id, rising_or_falling, action):
+	def _add_event(self, id, rising_or_falling, action):
 		"""
 		Register an event callback with the native_gpio
 		"""
