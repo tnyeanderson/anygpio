@@ -197,7 +197,7 @@ class InputPin(Pin):
 		Deregisters event handlers for the pin
 		"""
 
-		self._remove_event(self.id)
+		self._remove_event()
 
 	def _add_event(self, rising_or_falling, action):
 		"""
