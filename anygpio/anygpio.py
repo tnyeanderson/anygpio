@@ -573,7 +573,7 @@ class GPIO:
 			# (None) No pull up or pull down resistor (floating)
 			return None
 
-	def _add_event(id, rising_or_falling, action):
+	def _add_event(self, id, rising_or_falling, action):
 		"""
 		Register an event callback with the native_gpio
 		"""
