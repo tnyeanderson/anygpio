@@ -611,6 +611,20 @@ class GPIO:
 		"""
 		return [pin for pin in self.pins.values() if isinstance(pin, InputPin) and not isinstance(pin, OutputPin)]
 
+	def _add_all_events(self, pins):
+		"""
+		Registers event callbacks for each pin in pins[]
+		"""
+		for id, pin in self.pins.items():
+			pin.event()
+
+	def _remove_all_events(self, pins):
+		"""
+		Deregisters event callbacks for each pin in pins[]
+		"""
+		for id, pin in self.pins.items():
+			pin.remove_event()
+
 	def watch(self, interval=0.15, watch_outputs=False):
 		"""
 		Watch all pins for their desired_value, and execute pin.action()
@@ -651,7 +665,7 @@ class GPIO:
 		print("Broke out")
 
 		# Reset self._watching just in case stop_watching wasn't run
-		self.stop_watching
+		self.stop_watching()
 
 	def stop_watching(self):
 		"""
