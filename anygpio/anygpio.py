@@ -473,7 +473,8 @@ class GPIO:
 
 		Calls destroy() on all pins
 		"""
-		for id, pin in self.pins.items():
+		pins = self.pins.items()
+		for id, pin in pins:
 			pin.destroy()
 
 	def _remove_pin(self, pin):
