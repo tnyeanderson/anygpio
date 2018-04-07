@@ -5,7 +5,12 @@
 * Packagify wrappers?
 * Pull up and pull down resistor setting
 * Improve README
-* watch() don't watch outputs option
+* Fix pins[] to be a dictionary instead of list
+	- Update GPIO.pin()
+* Event-driven IO
+	- Bounce time
+	- Explicit setting of RISING or FALLING
+	- Omega2 and BeagleBone
 
 Wrappers for:
   - Orange Pi

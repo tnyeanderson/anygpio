@@ -101,10 +101,10 @@ class InputPin(Pin, anygpio.InputPin):
 
 	def value(self):
 		"""
-		Use this to return a curated, semantic value from the pins input
+		Use this to return a curated, semantic value from the pins input for watch()
 
-		For instance, on RPi, when a button is pressed, self.input() returns 0
-		This function should make it return 1 instead
+		This should return (0 or 1) for INACTIVE and ACTIVE respectively
+		If there is a pull up resistor this should return 0 for HIGH and 1 for LOW
 		"""
 		# TEMPLATE: Change this if native_gpio.input() returns 1 when button is pressed
 		return int(self.input())
@@ -199,13 +199,21 @@ class PWMPin(anygpio.PWMPin, OutputPin):
 		# PWM is not running
 		self._running = False
 
+	def change_frequency(self, value):
+		"""
+		Update the PWM frequency
+		"""
+
+		# TEMPLATE: Run native ChangeFrequency function
+		native_gpio.PWM.set_frequency(self.id, value)
+
 	def change_duty_cycle(self, value):
 		"""
 		Update the PWM duty cycle
 		"""
 
 		# TEMPLATE: Run native ChangeDutyCycle function
-		native_gpio.PWM..set_duty_cycle(self.id, value)
+		native_gpio.PWM.set_duty_cycle(self.id, value)
 
 	def destroy(self):
 		"""
@@ -231,40 +239,40 @@ class GPIO(anygpio.GPIO):
 		pass
 
 	# This has to be here to use the overridden Pin class
-	def _create_Pin_instance(*args):
+	def _create_Pin_instance(*args, **kwargs):
 		"""
 		Create an instance of Pin
 
 		Must be included in wrapper GPIO class to use overridden Pin Class
 		"""
-		return Pin(*args[1:])
+		return Pin(*args[1:], **kwargs)
 
 	# This has to be here to use the overridden InputPin class
-	def _create_InputPin_instance(*args):
+	def _create_InputPin_instance(*args, **kwargs):
 		"""
 		Create an instance of InputPin
 
 		Must be included in wrapper GPIO class to use overridden InputPin Class
 		"""
-		return InputPin(*args[1:])
+		return InputPin(*args[1:], **kwargs)
 
 	# This has to be here to use the overridden OutputPin class
-	def _create_OutputPin_instance(*args):
+	def _create_OutputPin_instance(*args, **kwargs):
 		"""
 		Create an instance of OutputPin
 
 		Must be included in wrapper GPIO class to use overridden OutputPin Class
 		"""
-		return OutputPin(*args[1:])
+		return OutputPin(*args[1:], **kwargs)
 
 	# This has to be here to use the overridden PWMPin class
-	def _create_PWMPin_instance(*args):
+	def _create_PWMPin_instance(*args, **kwargs):
 		"""
 		Create an instance of PWMPin
 
 		Must be included in wrapper GPIO class to use overridden PWMPin Class
 		"""
-		return PWMPin(*args[1:])
+		return PWMPin(*args[1:], **kwargs)
 
 	# TEMPLATE: Change to LOW or HIGH of native_gpio
 	def _native_high_or_low(self, value):
@@ -276,13 +284,27 @@ class GPIO(anygpio.GPIO):
 		return native_gpio.GPIO.HIGH if value else native_gpio.GPIO.LOW
 
 	# This has to be here to use the overridden InputPin class
-	def _get_input_pins(self):
+	def _get_all_input_pins(self):
 		"""
 		Get all input pins from self.pins
 
 		Must be included in wrapper GPIO class to use overridden InputPin Class
+		Since OutputPins can also be read in some systems, they can inherit from InputPin
+		This returns all InputPins (including OutputPins which are derived from InputPin)
+		Should never return PWMPins
 		"""
-		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, PWMPin)]
+		return [pin for pin in self.pins.values() if isinstance(pin, InputPin) and not isinstance(pin, PWMPin)]
+
+	# This has to be here to use the overridden InputPin class
+	def _get_input_pins_only(self):
+		"""
+		Get all input pins from self.pins
+
+		Must be included in wrapper GPIO class to use overridden InputPin Class
+		Since OutputPins can also be read in some systems, they can inherit from InputPin
+		This returns only InputPins
+		"""
+		return [pin for pin in self.pins.values() if isinstance(pin, InputPin) and not isinstance(pin, OutputPin)]
 
 	def cleanup(self):
 		"""
