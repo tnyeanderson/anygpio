@@ -451,7 +451,11 @@ class GPIO:
 
 		Drops the pin if it already exists
 		"""
-		self.drop_pin(self.pins[pin.id])
+		try:
+			self.drop_pin(self.pins[pin.id])
+		except KeyError:
+			# If the pin doesn't exist, ignore it
+			pass
 		self.pins[pin.id] = (pin)
 
 	def drop_pin(self, pin):
