@@ -68,8 +68,18 @@ GPIO.setup_pin(18, "MY_OUTPUTTER", is_output=True, initial_value=1)
 
 ## Using pins
 
-Return a `pin` from the `pin` array
+Pins are stored in the dictionary `GPIO.pins`. The key for each pin is its `id`.
+
+Returns a `pin` from the `pin` array. If the argument is a key in GPIO.pins, that pin is returned. Otherwise it searches by `pin.number` (if int) or `pin.name` (if string)
 ```
+# Returns the pin with id=18 by key lookup in GPIO.pins
+GPIO.pin(18)
+
+# This is the same as accessing the pin directly
+GPIO.pins[18]
+
+# If pin with id 18 doesn't exist...
+
 # Searches by `pin.number` (int)
 GPIO.pin(18)
 
@@ -77,14 +87,10 @@ GPIO.pin(18)
 GPIO.pin("MY_BUTTON")
 ```
 
-In `GPIO.pin(id)`, `id` is what will be passed to the Native GPIO library to identify the pin.
+`id` is what will be passed to the Native GPIO library to identify the pin.
 
 In RPi, this is the same as `pin.number` but on other systems (like BeagleBone) it is a combination of `pin.number` and `pin.header` (`'p9_10'`) or something else entirely (C.H.I.P)!
 
-If searching for an `id` that is a string (like on CHIP or BeagleBone), set `id` explicitly
-```
-GPIO.pin(id="p9_10")
-```
 
 ### Destroy a pin
 ```

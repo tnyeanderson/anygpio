@@ -380,7 +380,7 @@ class GPIO:
 		"""
 		Sets default values and constructs instance of Pin
 		"""
-		self.pins = []
+		self.pins = {}
 		self.supports = Supports()
 		self.system = None
 		self.native = None
@@ -451,8 +451,8 @@ class GPIO:
 
 		Drops the pin if it already exists
 		"""
-		self.drop_pin(self.pin(id=pin.id))
-		self.pins.append(pin)
+		self.drop_pin(self.pins[pin.id])
+		self.pins[pin.id] = (pin)
 
 	def drop_pin(self, pin):
 		"""
@@ -469,15 +469,18 @@ class GPIO:
 
 		Calls destroy() on all pins
 		"""
-		while self.pins:
-			self.pins[0].destroy()
+		for id, pin in self.pins.items():
+			pin.destroy()
 
 	def _remove_pin(self, pin):
 		"""
 		Removes a pin from the pins array
 		"""
-		if pin and (pin in self.pins):
-			self.pins.remove(pin)
+		try:
+			del self.pins[pin.id]
+		except KeyError:
+			# If the pin doesn't exist, ignore it
+			pass
 
 	def PWM(self, number, frequency, duty_cycle=0, name=None):
 		"""
@@ -495,20 +498,11 @@ class GPIO:
 		pwm_pin.setup(frequency, duty_cycle)
 		self._add_pin(pwm_pin)
 
-	def _find_pin_by_id(self, id):
-		"""
-		Return pin from pins array by id
-		"""
-		for pin in self.pins:
-			if id == pin.id:
-				return pin
-		return False
-
 	def _find_pin_by_number(self, number):
 		"""
 		Return pin from pins array by number
 		"""
-		for pin in self.pins:
+		for id, pin in self.pins.items():
 			if number == pin.number:
 				return pin
 		return False
@@ -517,12 +511,12 @@ class GPIO:
 		"""
 		Return pin from pins array by name
 		"""
-		for pin in self.pins:
+		for id, pin in self.pins.items():
 			if name == pin.name:
 				return pin
 		return False
 
-	def pin(self, query=None, id=None):
+	def pin(self, query=None):
 		"""
 		Find a pin in the pins array
 
@@ -530,9 +524,12 @@ class GPIO:
 		Explicitly set id if searching by id
 		"""
 
-		if id:
-			# Searching by id
-			return self._find_pin_by_id(id)
+		try:
+			# If query is a key in self.pins{}, return it
+			return self.pins[query]
+		except KeyError:
+			# If the key doesn't exist, try searching by number or name
+			pass
 
 		# Check datatype of query
 		if isinstance(query, int):
@@ -597,7 +594,7 @@ class GPIO:
 		Since OutputPins can also be read in some systems, they can inherit from InputPin
 		This returns all InputPins (including OutputPins which are derived from InputPin)
 		"""
-		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, PWMPin)]
+		return [pin for pin in self.pins.values() if isinstance(pin, InputPin) and not isinstance(pin, PWMPin)]
 
 	def _get_input_pins_only(self):
 		"""
@@ -607,7 +604,7 @@ class GPIO:
 		Since OutputPins can also be read in some systems, they can inherit from InputPin
 		This returns only InputPins
 		"""
-		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, OutputPin)]
+		return [pin for pin in self.pins.values() if isinstance(pin, InputPin) and not isinstance(pin, OutputPin)]
 
 	def watch(self, interval=0.15, watch_outputs=False):
 		"""

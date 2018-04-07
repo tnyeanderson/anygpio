@@ -286,7 +286,7 @@ class GPIO(anygpio.GPIO):
 		Since OutputPins can also be read in some systems, they can inherit from InputPin
 		This returns all InputPins (including OutputPins which are derived from InputPin)
 		"""
-		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, PWMPin)]
+		return [pin for pin in self.pins.values() if isinstance(pin, InputPin) and not isinstance(pin, PWMPin)]
 
 	# This has to be here to use the overridden InputPin class
 	def _get_input_pins_only(self):
@@ -297,7 +297,7 @@ class GPIO(anygpio.GPIO):
 		Since OutputPins can also be read in some systems, they can inherit from InputPin
 		This returns only InputPins
 		"""
-		return [pin for pin in self.pins if isinstance(pin, InputPin) and not isinstance(pin, OutputPin)]
+		return [pin for pin in self.pins.values() if isinstance(pin, InputPin) and not isinstance(pin, OutputPin)]
 
 	def cleanup(self):
 		"""
