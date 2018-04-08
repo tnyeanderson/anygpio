@@ -325,6 +325,8 @@ class GPIO(anygpio.GPIO):
 		Returns GPIO.PUD_UP (1) or GPIO.PUD_DOWN (0) or None (None)
 		"""
 
+		self.supports.require('pull_up_down')
+
 		if value == 0:
 			# Pull down resistor
 			return native_gpio.PUD_DOWN
@@ -335,13 +337,15 @@ class GPIO(anygpio.GPIO):
 
 		else:
 			# (None) No pull up or pull down resistor (floating)
-			return None
+			return native_gpio.PUD_OFF
 
 	# TEMPLATE: Change to RISING and FALLING of native_gpio
 	def _native_rising_falling(self, value):
 		"""
 		Returns GPIO.RISING (1) or GPIO.FALLING (0)
 		"""
+
+		self.supports.require('events')
 
 		return (native_gpio.RISING if value else native_gpio.FALLING)
 

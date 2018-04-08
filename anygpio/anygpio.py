@@ -29,6 +29,15 @@ class Supports:
 	pull_up_down = False
 	events = False
 
+	def require(self, feature):
+		"""
+		Throws an exception if `feature` is not supported
+		"""
+		if not getattr(self, feature):
+			# self.<feature> is False (not supported)
+			raise GPIOFunctionNotSupported("Not supported on current system: ", feature)
+
+
 
 # Generic Pin class
 class Pin:
@@ -166,7 +175,7 @@ class InputPin(Pin):
 		"""
 		return (self.value() == self.desired_value)
 
-	def event(self, action=None, desired_value=None, bounce=None, both=False):
+	def event(self, action=None, rising_falling=None, bounce=None, both=False):
 		"""
 		Registers an event handler for interrupt-driven GPIO if supported
 
@@ -177,11 +186,12 @@ class InputPin(Pin):
 		# Don't set self.action, just use it as default
 		action = action or self.action
 
-		# Set self.desired_value if desired_value is set
-		self.desired_value = desired_value or self.desired_value
-
 		if both:
+			# Watch both RISING and FALLING
 			rising_or_falling = native_gpio.BOTH
+		elif rising_falling is not None
+			# Determine GPIO.RISING or GPIO.FALLING
+			rising_or_falling = self._native_rising_falling(rising_falling)
 		else:
 			# Determine GPIO.RISING or GPIO.FALLING from pull_up_down
 			# RISING (1) if pull down (0) or no resistor (None)
@@ -403,7 +413,7 @@ class GPIO:
 		if not self.system:
 			raise errors.SystemNotSet("Please set your system first")
 
-	def setup_pin(self, id, name=None, action=do_nothing, is_output=False, *args, **kwargs):
+	def setup_pin(self, id, name=None, action=do_nothing, out=False, *args, **kwargs):
 		"""
 		Use this to initialize a pin
 
@@ -412,7 +422,7 @@ class GPIO:
 		self._require_system_set()
 
 		# Create the correct type of Pin
-		if is_output:
+		if out:
 			# Output pin
 			pin = self._create_OutputPin_instance(id, name, action, *args, **kwargs)
 		else:
@@ -496,8 +506,7 @@ class GPIO:
 		"""
 		self._require_system_set()
 
-		if not self.supports.pwm:
-			raise GPIOFunctionNotSupported("PWM is not supported on system")
+		self.supports.require('pwm')
 
 		pwm_pin = self._create_PWMPin_instance(number, name)
 		pwm_pin.setup(frequency, duty_cycle)
@@ -570,6 +579,8 @@ class GPIO:
 
 		self._require_system_set()
 
+		self.supports.require('events')
+
 		return (native_gpio.RISING if value else native_gpio.FALLING)
 
 	def _native_pull_up_down(self, value):
@@ -578,6 +589,8 @@ class GPIO:
 		"""
 
 		self._require_system_set()
+
+		self.supports.require('pull_up_down')
 
 		if value == 0:
 			# Pull down resistor
@@ -589,7 +602,7 @@ class GPIO:
 
 		else:
 			# (None) No pull up or pull down resistor (floating)
-			return None
+			return native_gpio.PUD_OFF
 
 	def _get_all_input_pins(self):
 		"""
@@ -615,6 +628,9 @@ class GPIO:
 		"""
 		Registers event callbacks for each pin in pins[]
 		"""
+
+		self.supports.require('events')
+
 		for id, pin in self.pins.items():
 			pin.event()
 
@@ -622,6 +638,9 @@ class GPIO:
 		"""
 		Deregisters event callbacks for each pin in pins[]
 		"""
+
+		self.supports.require('events')
+
 		for id, pin in self.pins.items():
 			pin.remove_event()
 
