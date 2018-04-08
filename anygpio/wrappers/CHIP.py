@@ -120,7 +120,7 @@ class InputPin(Pin, anygpio.InputPin):
 		bounce = bounce or 300
 
 		# TEMPLATE: Call the native add_event_detect function
-		native_gpio.GPIO.add_event_detect(self.id, rising_or_falling, action, bouncetime=bounce)
+		native_gpio.GPIO.add_event_callback(self.id, rising_or_falling, action, bouncetime=bounce)
 
 	def _remove_event(self):
 		"""
@@ -136,6 +136,8 @@ class InputPin(Pin, anygpio.InputPin):
 
 		This has to be here to have access to the wrapper variable
 		"""
+
+		self.supports.require('events')
 
 		return wrapper._native_rising_falling(*args[1:])
 
@@ -311,6 +313,8 @@ class GPIO(anygpio.GPIO):
 		Returns GPIO.PUD_UP (1) or GPIO.PUD_DOWN (0) or None (None)
 		"""
 
+		self.supports.require('pull_up_down')
+
 		if value == 0:
 			# Pull down resistor
 			return native_gpio.GPIO.PUD_DOWN
@@ -321,7 +325,7 @@ class GPIO(anygpio.GPIO):
 
 		else:
 			# (None) No pull up or pull down resistor (floating)
-			return None
+			return native_gpio.GPIO.PUD_OFF
 
 	# TEMPLATE: Change to LOW or HIGH of native_gpio
 	def _native_high_or_low(self, value):
@@ -375,6 +379,7 @@ wrapper = GPIO()
 # TEMPLATE: Set GPIO Supports:
 wrapper.supports.pwm = True
 wrapper.supports.pull_up_down = True
+wrapper.supports.events = True
 
 
 # Set the system to the name of the file

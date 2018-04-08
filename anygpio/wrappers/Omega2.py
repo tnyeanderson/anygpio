@@ -299,6 +299,35 @@ class GPIO(anygpio.GPIO):
 		"""
 		return [pin for pin in self.pins.values() if isinstance(pin, InputPin) and not isinstance(pin, OutputPin)]
 
+	def _native_pull_up_down(self, value):
+		"""
+		Returns GPIO.PUD_UP (1) or GPIO.PUD_DOWN (0) or None (None)
+		"""
+
+		self.supports.require('pull_up_down')
+
+		if value == 0:
+			# Pull down resistor
+			return native_gpio.PUD_DOWN
+
+		elif value == 1:
+			# Pull up resistor
+			return native_gpio.PUD_UP
+
+		else:
+			# (None) No pull up or pull down resistor (floating)
+			return native_gpio.PUD_OFF
+
+	# TEMPLATE: Change to RISING and FALLING of native_gpio
+	def _native_rising_falling(self, value):
+		"""
+		Returns GPIO.RISING (1) or GPIO.FALLING (0)
+		"""
+
+		self.supports.require('events')
+
+		return (native_gpio.RISING if value else native_gpio.FALLING)
+
 	def cleanup(self):
 		"""
 		Run the native GPIO cleanup() function if available
@@ -318,6 +347,8 @@ wrapper = GPIO()
 
 # TEMPLATE: Set GPIO Supports:
 wrapper.supports.pwm = False
+wrapper.supports.pull_up_down = False
+wrapper.supports.events = False
 
 
 # Set the system to the name of the file

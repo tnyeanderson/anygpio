@@ -3,7 +3,7 @@
 *This project is a work in progress, changes may be made at any time that may not be backwards compatible. Submit a pull request to help make this not a WIP!*
 
 This goal of this project is to create a "universal"
-language for simple GPIO functions on Single-Board Computers (SBCs). Currently, this involves simple pin initialization, reading input (HIGH or LOW), and outputting to the pin (HIGH or LOW). PWM is also supported when available. More functionality may be added later (such as event-driven GPIO).
+language for simple GPIO functions on Single-Board Computers (SBCs). Currently, this involves simple pin initialization, reading input (HIGH or LOW), and outputting to the pin (HIGH or LOW). PWM and event-driven GPIO are also supported, when available.
 
 This project is designed to be modular and accessible. It provides access to any native GPIO objects so you will never lose functionality using this library as long as your SBC is supported (check the `anygpio/wrappers` folder for your SBC).
 
@@ -61,7 +61,7 @@ GPIO.setup_pin(18)
 
 Default initial value is always `0` (LOW) unless set here
 ```
-GPIO.setup_pin(18, "MY_OUTPUTTER", is_output=True, initial_value=1)
+GPIO.setup_pin(18, "MY_OUTPUTTER", out=True, initial_value=1)
 ```
 
 ---
@@ -91,11 +91,7 @@ GPIO.pin("MY_BUTTON")
 
 In RPi, this is the same as `pin.number` but on other systems (like BeagleBone) it is a combination of `pin.number` and `pin.header` (`'p9_10'`) or something else entirely (C.H.I.P)!
 
-
-### Destroy a pin
-```
-GPIO.pin(18).destroy()
-```
+---
 
 ### Reading input pins
 
@@ -210,6 +206,11 @@ GPIO.pin(18).change_duty_cycle(75)
 ---
 
 ## Cleaning up
+
+Destroy a pin
+```
+GPIO.pin(18).destroy()
+```
 
 Run native GPIO cleanup functions
 ```
