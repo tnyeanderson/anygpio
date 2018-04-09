@@ -9,10 +9,15 @@ This project is designed to be modular and accessible. It provides access to any
 
 ## Currently supported:
 
-* Raspberry Pi (RPi.GPIO)
-* Omega2 (onionGpio) [Not tested]
-* C.H.I.P (CHIP_IO) [Not tested]
-* BeagleBone (Adafruit_BBIO) [Not tested]
+* Raspberry Pi ([RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO))
+* Omega2 ([onionGpio](https://docs.onion.io/omega2-docs/gpio-python-module.html)) `[Not tested]`
+* C.H.I.P ([CHIP_IO](https://github.com/xtacocorex/CHIP_IO)) `[Not tested]`
+* BeagleBone ([Adafruit_BBIO](https://github.com/adafruit/adafruit-beaglebone-io-python)) `[Not tested]`
+* OrangePi ([OPi.GPIO](https://github.com/rm-hull/OPi.GPIO)) `[Not tested]`
+	- See the [OPi Documentation](https://opi-gpio.readthedocs.io/en/latest/api-documentation.html) about pull_up_down support and bouncetime
+- BananaPi ([BPI-SINOVOIP/RPi.GPIO](https://github.com/BPI-SINOVOIP/RPi.GPIO)) `[Not tested]`
+- NanoPi ([RPi.GPIO_NP](https://github.com/auto3000/RPi.GPIO_NP)) `[Not tested]`
+- Pine A64 ([RPi.GPIO-PineA64](https://github.com/swkim01/RPi.GPIO-PineA64)) `[Not tested]`
 
 *If you don't see your favorite SBC on the list, submit a pull request!*
 

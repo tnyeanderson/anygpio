@@ -4,6 +4,11 @@ from pathlib import Path
 from .. import anygpio
 from .. import errors
 
+####################################
+# C.H.I.P. Wrapper			   	   #
+####################################
+
+
 # TEMPLATE: Set to the native GPIO module name
 native_gpio_name = "CHIP_IO"
 
