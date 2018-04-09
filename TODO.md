@@ -3,8 +3,4 @@
 
 Wrappers for:
   - Nano Pi
-  - Pine A64
-  - Minnow Board
-  - micro:bit
-  - Parallela
   - ODroid

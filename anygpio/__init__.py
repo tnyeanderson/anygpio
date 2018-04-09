@@ -9,20 +9,27 @@ this = sys.modules[__name__]
 # The base module path to wrappers
 wrapper_path = ".wrappers."
 
-# Change this to your SBC's file
-sbc_name = "RPi"
 
-try:
-	#from .wrappers import RPi as SBC
-	SBC = import_module(wrapper_path + sbc_name, __package__)
-except:
-	# raise errors.WrapperError("Wrapper `" + sbc_name + "` could not be imported")
-	raise
+def set_system(name):
+	"""
+	Imports the corresponding wrapper module
+
+	`name` should be the same as the wrapper file's name without the extension
+	"""
+	try:
+		#from .wrappers import RPi as SBC
+		SBC = import_module(wrapper_path + name, __package__)
+	except:
+		# raise errors.WrapperError("Wrapper `" + sbc_name + "` could not be imported")
+		raise
+
+	# Set GPIO to the wrapper returned from the SBC file
+	this.GPIO = SBC.wrapper
 
 
-# Set GPIO to the wrapper returned from the SBC file
-this.GPIO = SBC.wrapper
-
+# Set the system to RPi to default for compatibility purposes
+# Should probably be removed for performance
+set_system("RPi")
 
 
 class ExitHandler:
