@@ -26,6 +26,9 @@ def set_system(name):
 	# Set GPIO to the wrapper returned from the SBC file
 	this.GPIO = SBC.wrapper
 
+	# Return GPIO so it can be set to the result of this command
+	return this.GPIO
+
 
 # Set the system to RPi to default for compatibility purposes
 # Should probably be removed for performance
