@@ -227,6 +227,35 @@ class InputPin(Pin):
 
 		# native_gpio.remove_event_detect(self.id, rising_or_falling, action)
 
+	def wait_for_edge(self, rising_falling=None, both=None):
+		"""
+		Determine RISING, FALLING, or BOTH and run _wait_for_edge()
+		"""
+		if both:
+			# Watch both RISING and FALLING
+			rising_or_falling = native_gpio.BOTH
+		elif rising_falling is not None:
+			# Determine GPIO.RISING or GPIO.FALLING
+			rising_or_falling = self._native_rising_falling(rising_falling)
+		else:
+			# Determine GPIO.RISING or GPIO.FALLING from pull_up_down
+			# RISING (1) if pull down (0) or no resistor (None)
+			# FALLING (0) if pull up (1)
+			# Use 'not' on pull_up_down to get the correct result from _native_rising_falling
+			rising_or_falling = self._native_rising_falling(not self.pull_up_down)
+
+		# Runs the native wait_for_edge() function
+		self._wait_for_edge(self, rising_or_falling)
+
+	def _wait_for_edge(self, rising_or_falling):
+		"""
+		Runs native wait_for_edge() function
+		"""
+		self._require_system_set()
+
+		# native_gpio.wait_for_edge(self.id, rising_or_falling)
+
+
 	def _native_rising_falling(*args):
 		"""
 		Call the wrapper._native_rising_falling() method

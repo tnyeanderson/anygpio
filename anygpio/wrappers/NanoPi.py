@@ -5,7 +5,7 @@ from .. import anygpio
 from .. import errors
 
 ####################################
-# Nano Pi Wrapper				   #	
+# Nano Pi Wrapper				   #
 ####################################
 
 
@@ -134,6 +134,14 @@ class InputPin(Pin, anygpio.InputPin):
 
 		# TEMPLATE: Call the native remove_event_detect() method
 		native_gpio.remove_event_detect(self.id)
+
+	def _wait_for_edge(self, rising_or_falling):
+		"""
+		Runs native wait_for_edge() function
+		"""
+
+		# TEMPLATE: Call the native wait_for_edge() method
+		native_gpio.wait_for_edge(self.id, rising_or_falling)
 
 	def _native_rising_falling(*args):
 		"""
