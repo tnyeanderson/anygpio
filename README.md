@@ -27,7 +27,7 @@ Just use `anygpio/wrappers/RPi.py` as a template. All you need to change is a fe
 
 `(0 or 1)` should be used as GPIO.LOW and GPIO.HIGH respectively
 
-Currently, this library requires you to change `__init__.py` to import your SBC's corresponding wrapper file. This is not ideal. There are plans in the future to create a separate python package that will be used to identify the current SBC in use, and this library will use that to import the corresponding wrapper file.
+Currently, this library requires you to set your system (See **Getting Started**) to import your SBC's corresponding wrapper file. This is not ideal. There are plans in the future to create a separate python package that will be used to identify the current SBC in use, and this library will use that to import the corresponding wrapper file.
 
 ---
 
@@ -40,10 +40,20 @@ cd anygpio
 sudo pip3 install --upgrade .
 ```
 
-Then:
+*Then:*
 
+To import the default wrapper (RPi.GPIO):
 ```
 from anygpio import GPIO
+```
+
+Or, to set your system manually:
+```
+import anygpio
+
+# Use the file name in wrappers without the extension.
+# For example, CHIP
+GPIO = anygpio.set_system("CHIP")
 ```
 
 ---
@@ -145,7 +155,6 @@ If pin 18 is hooked up to a button and the button is pressed, `my_button_pressed
 
 RISING or FALLING is determined by pull up or pull down resistor by default
 
-Explicit setting of RISING/FALLING coming soon!
 
 ```
 GPIO.pin(18).event()
@@ -158,6 +167,11 @@ GPIO.pin(18).event(bounce=1000)
 
 # Watch for both RISING and FALLING events
 GPIO.pin(18).event(both=True)
+
+# To set FALLING or RISING explicitly
+# Use (0 or 1) for FALLING and RISING respectively
+GPIO.pin(18).event(rising_falling=1)
+
 
 # Deregister an event callback
 GPIO.pin(18).remove_event()
